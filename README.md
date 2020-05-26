@@ -5,7 +5,8 @@ A simple image organizer app created using python 3.7 and pyqt5.
 # Changelog:
 
 **2020.05.26**
-Version 0.1 - Initial release with core functionality.
+Version 0.1 
+  - Initial release with core functionality.
 
 
 # How To:
