@@ -20,7 +20,8 @@ A simple image organizer app created using python 3.7 and pyqt5.
 8. Confirming the action executes the operations.
 
 # Todo:
-- Compile into executable for Win, MacOS, and Linux.
+- Fix OS Compatibility
+- Compile into executable for Win, MacOS, ~~and Linux~~.
 - Add the ability to simply press the enter button instead of having to click every button.
 - Add the use of the keyboard to navigate through the thumbnails.
 - Look into multiple image selection.
