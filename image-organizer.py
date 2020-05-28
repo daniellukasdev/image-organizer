@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, Qt, QtWidgets
-from PyQt5.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene, QGraphicsView, QGridLayout, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
+from PyQt5.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
+    QGraphicsView, QGridLayout,QLineEdit, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
 from PyQt5.QtGui import QImage, QPixmap
 import sys, os, shutil
 
@@ -16,6 +17,7 @@ class MainWindow(QtWidgets.QWidget):
         '''MainWindow Constructor'''
         super().__init__(*args, **kwargs)
         self.title = 'Image Organizer'
+        self.setWindowIcon(QtGui.QIcon('image-organizer-icon.svg'))
         self.width = 1280
         self.height = 960
         self.initUI()
@@ -117,7 +119,7 @@ class MainWindow(QtWidgets.QWidget):
         self.next_button.setDisabled(True)
 
         # status bar
-        self.loading_msg_label = QtWidgets.QLineEdit(self)
+        self.loading_msg_label = QLineEdit(self)
         self.loading_msg_label.setStyleSheet(
             "border: 1px solid rgb(200,200,200); background-color:transparent; color: rgb(100,100,100);")
         self.loading_msg_label.setText("")
@@ -128,6 +130,18 @@ class MainWindow(QtWidgets.QWidget):
             QtWidgets.QSizePolicy.Fixed)
         self.loading_msg_label.setAlignment(QtCore.Qt.AlignLeft)
         self.loading_msg_label.textChanged[str].connect(self.loading_msg_check)
+
+        # version number
+        self.version_label = QLineEdit(self)
+        self.version_label.setStyleSheet(
+            "border: 1px solid rgb(200,200,200); background-color:transparent; color: rgb(100,100,100);")
+        self.version_label.setText('v0.1')
+        self.version_label.setDisabled(True)
+        self.version_label.setFont(self.itallic_font)
+        self.version_label.setSizePolicy(
+            QtWidgets.QSizePolicy.Fixed,
+            QtWidgets.QSizePolicy.Fixed)
+        self.version_label.setAlignment(QtCore.Qt.AlignRight)
 
         ####################### Layout ########################
 
@@ -212,10 +226,14 @@ class MainWindow(QtWidgets.QWidget):
         self.vertical_splitter.setCollapsible(0, False)
         self.vertical_splitter.setCollapsible(1, False)
 
+        # status area
+        self.status_layout = QtWidgets.QHBoxLayout()
+        self.status_layout.addWidget(self.loading_msg_label,2)
+        self.status_layout.addWidget(self.version_label,0)
         # add sub_layouts to main layout
         self.main_layout.addWidget(self.top_frame)
         self.main_layout.addWidget(self.vertical_splitter)
-        self.main_layout.addWidget(self.loading_msg_label)
+        self.main_layout.addLayout(self.status_layout)
         # sets the parent/main layout
         self.setLayout(self.main_layout)
 
@@ -508,7 +526,6 @@ class MainWindow(QtWidgets.QWidget):
         self.loading_msg_label.setText(f"{self.current_image} added to {self.category_name}")
         print(self.file_operation_dict)
         self.organization_btn_status()
-        #self.add_to_categories()
 
     def show_category_if_categorized(self):
         ''' If an image has been added to a category, 
@@ -518,8 +535,6 @@ class MainWindow(QtWidgets.QWidget):
         if self.current_image in self.file_operation_dict.keys():
             self.category_index = self.category_selector.findText(self.file_operation_dict[self.current_image], QtCore.Qt.MatchFixedString)
             self.category_selector.setCurrentIndex(self.category_index)
-            #print(self.file_operation_dict[self.current_image])
-            #print(self.category_index)
         else:
             self.category_selector.setCurrentIndex(0)
             
@@ -540,7 +555,6 @@ class MainWindow(QtWidgets.QWidget):
         self.yes_button = self.last_chance_message_box.button(QMessageBox.Yes)
         self.no_button = self.last_chance_message_box.button(QMessageBox.No)
         self.no_button.setText("Cancel")
-        #self.last_chance_message_box.buttonClicked.connect(self.warning_button_clicked)
 
         self.last_chance_message_box.exec_()
 
@@ -585,8 +599,6 @@ class MainWindow(QtWidgets.QWidget):
         ''' Removes the image in the main display '''
         self.image_display.clear()
     
-    #def remove_category(self):
-        
     def clear_categories_tree(self):
         ''' Removes all items from the category view widget '''
         self.category_view.clear()
@@ -598,8 +610,8 @@ class MainWindow(QtWidgets.QWidget):
         self.category_selector.addItem("--Select Category--")
         self.set_category_index()
 
-if __name__ == '__main__': # the following code will only run if this .py script was actually run and not imported
-    app = QtWidgets.QApplication(sys.argv) # sys.argv allows command line arguments 
+if __name__ == '__main__': 
+    app = QtWidgets.QApplication(sys.argv) 
     mw = MainWindow()
-    mw.show() # this goes here only if not called in the MainWindow class
-    sys.exit(app.exec_()) # This gives the system a valid exit status
+    mw.show() 
+    sys.exit(app.exec_()) 
