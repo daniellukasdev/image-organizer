@@ -2,12 +2,7 @@
 A simple image organizer app created using python 3.7 and pyqt5.
 
 
-# Changelog:
-
-**2020.05.26**
-*version 0.1* 
-- Initial release with core functionality.
-
+_*On Windows you may need to whitelist image-organizer.exe to your antivirus settings_  
 
 # How To:
 1. Click *Browse* to get the path to the image folder.
@@ -20,8 +15,6 @@ A simple image organizer app created using python 3.7 and pyqt5.
 8. Confirming the action executes the operations.
 
 # Todo:
-- Fix OS Compatibility
-- Compile into executable for Win, MacOS, ~~and Linux~~.
 - Add the ability to simply press the enter button instead of having to click every button.
 - Add the use of the keyboard to navigate through the thumbnails.
 - Look into multiple image selection.
@@ -29,3 +22,4 @@ A simple image organizer app created using python 3.7 and pyqt5.
 
 # Known Bugs
 - Once a directory is loaded, the first thumbnail does not get highlighted on the second import if the filename of the first image matches that of the filename of the first image currently loaded.
+- Running app icon on Windows only shows generic system icon.
