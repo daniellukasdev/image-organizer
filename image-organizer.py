@@ -141,8 +141,8 @@ class MainWindow(QtWidgets.QWidget):
         self.version_label.setDisabled(True)
         self.version_label.setFont(self.itallic_font)
         self.version_label.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed,
-            QtWidgets.QSizePolicy.Fixed)
+            QtWidgets.QSizePolicy.Minimum,
+            QtWidgets.QSizePolicy.Minimum)
         self.version_label.setAlignment(QtCore.Qt.AlignRight)
 
         ####################### Layout ########################
@@ -230,8 +230,8 @@ class MainWindow(QtWidgets.QWidget):
 
         # status area
         self.status_layout = QtWidgets.QHBoxLayout()
-        self.status_layout.addWidget(self.loading_msg_label,2)
-        self.status_layout.addWidget(self.version_label,0)
+        self.status_layout.addWidget(self.loading_msg_label,3)
+        self.status_layout.addWidget(self.version_label,1)
         # add sub_layouts to main layout
         self.main_layout.addWidget(self.top_frame)
         self.main_layout.addWidget(self.vertical_splitter)
