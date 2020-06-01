@@ -2,8 +2,9 @@ from PyQt5 import QtCore, QtGui, Qt, QtWidgets
 from PyQt5.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
     QGraphicsView, QGridLayout,QLineEdit, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
 from PyQt5.QtGui import QImage, QPixmap
-import sys, os, shutil
+import sys, os, platform, shutil, qtmodern.styles, qtmodern.windows 
 
+    
 class ClickFrame(QtWidgets.QFrame):
     clicked = QtCore.pyqtSignal()
 
@@ -17,7 +18,6 @@ class MainWindow(QtWidgets.QWidget):
         '''MainWindow Constructor'''
         super().__init__(*args, **kwargs)
         self.title = 'Image Organizer'
-        self.setWindowIcon(QtGui.QIcon('image-organizer-icon.svg'))
         self.width = 1280
         self.height = 960
         self.initUI()
@@ -84,7 +84,7 @@ class MainWindow(QtWidgets.QWidget):
         self.organize_button.setFixedWidth(125)
         self.organize_button.setSizePolicy(
             QtWidgets.QSizePolicy.Fixed,
-            QtWidgets.QSizePolicy.Fixed)
+            QtWidgets.QSizePolicy.Preferred)
         self.organize_button.clicked.connect(self.organize_warning_popup)
         self.organize_button.setDisabled(True)
 
@@ -102,18 +102,20 @@ class MainWindow(QtWidgets.QWidget):
         self.scrolling_display_area.setWidget(self.image_display)
             
         # Image Navigation Buttons
-        self.previous_button = QtWidgets.QPushButton('<', self)
+        self.previous_button = QtWidgets.QPushButton("<", self)
+        self.previous_button.setFont(self.big_font)
         self.previous_button.setMaximumWidth(25)
         self.previous_button.setSizePolicy(
-            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Fixed,
             QtWidgets.QSizePolicy.Preferred)
         self.previous_button.clicked.connect(self.previous_image)
         self.previous_button.setDisabled(True)
 
-        self.next_button = QtWidgets.QPushButton('>', self)
+        self.next_button = QtWidgets.QPushButton(">", self)
+        self.next_button.setFont(self.big_font)
         self.next_button.setMaximumWidth(25)
         self.next_button.setSizePolicy(
-            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Fixed,
             QtWidgets.QSizePolicy.Preferred)
         self.next_button.clicked.connect(self.next_image)
         self.next_button.setDisabled(True)
@@ -121,7 +123,7 @@ class MainWindow(QtWidgets.QWidget):
         # status bar
         self.loading_msg_label = QLineEdit(self)
         self.loading_msg_label.setStyleSheet(
-            "border: 1px solid rgb(200,200,200); background-color:transparent; color: rgb(100,100,100);")
+            "border: 1px solid rgb(42,42,42); background-color:transparent; color: rgb(127,127,127);")
         self.loading_msg_label.setText("")
         self.loading_msg_label.setDisabled(True)
         self.loading_msg_label.setFont(self.itallic_font)
@@ -134,8 +136,8 @@ class MainWindow(QtWidgets.QWidget):
         # version number
         self.version_label = QLineEdit(self)
         self.version_label.setStyleSheet(
-            "border: 1px solid rgb(200,200,200); background-color:transparent; color: rgb(100,100,100);")
-        self.version_label.setText('v0.1')
+            "border: 1px solid rgb(42,42,42); background-color:transparent; color: rgb(127,127,127);")
+        self.version_label.setText('Created by: Daniel Lukas v0.1.1alpha')
         self.version_label.setDisabled(True)
         self.version_label.setFont(self.itallic_font)
         self.version_label.setSizePolicy(
@@ -170,7 +172,7 @@ class MainWindow(QtWidgets.QWidget):
         # Create the main Display and Navigation Layout
         self.image_nav_layout = QtWidgets.QHBoxLayout()
         self.image_nav_layout.addWidget(self.previous_button, 0)
-        self.image_nav_layout.addWidget(self.scrolling_display_area, 5)
+        self.image_nav_layout.addWidget(self.scrolling_display_area, 4)
         self.image_nav_layout.addWidget(self.next_button, 0)
         
         # add selection layout to right_layout
@@ -188,7 +190,7 @@ class MainWindow(QtWidgets.QWidget):
 
         self.left_layout.addLayout(self.category_create_new_layout, 0)
         self.left_layout.addWidget(self.category_view, 1)
-        self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignRight)
+        self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignCenter)
 
         # Creates the horizontal splitter
         self.horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
@@ -239,7 +241,6 @@ class MainWindow(QtWidgets.QWidget):
 
         self.build_selector()
 
-
     def load_btn_status(self):
         ''' Disables and enables the load button when the conditions are met '''
         if self.selection_input.text() != "":
@@ -279,7 +280,8 @@ class MainWindow(QtWidgets.QWidget):
 
     def add_wd_to_tree(self):
         ''' Adds the working directory as the root item in the category view '''
-        
+        self.current_os = platform.system()
+
         if "/" in self.working_directory:
             self.clear_categories_tree()
             self.image_folder = self.working_directory.split("/")[-1]
@@ -498,7 +500,7 @@ class MainWindow(QtWidgets.QWidget):
     def highlight_selected(self):
         ''' sets the style of the selected thumbnail '''
         self.thumb_selected = self.findChild(ClickFrame, self.thumb_list[self.image_index])
-        self.thumb_selected.setStyleSheet("border: 1px solid blue; background-color: blue; color: white;")
+        self.thumb_selected.setStyleSheet("border: 1px solid rgb(42, 130, 218); background-color: rgb(42, 130, 218); color: white;")
         print(self.thumb_list[self.image_index])
 
     def thumbnail_click(self):
@@ -513,7 +515,7 @@ class MainWindow(QtWidgets.QWidget):
         self.unhighlight_all()
         self.show_category_if_categorized()
         #sets the style of the selected thumbnail
-        self.clicked.setStyleSheet("border: 1px solid blue; background-color: blue; color: white;")
+        self.clicked.setStyleSheet("border: 1px solid rgb(42, 130, 218); background-color: rgb(42, 130, 218); color: white;")
 
     def build_file_operation_dict(self):
         ''' Populates the dictionary that all file operations reference '''
@@ -578,7 +580,10 @@ class MainWindow(QtWidgets.QWidget):
             os.mkdir(f"{self.category_name}")
 
         for self.current_image, self.category_name in self.file_operation_dict.items():
-            shutil.move(self.current_image, f"{self.working_directory}/{self.category_name}")
+            if self.current_os == "Linux" or self.current_os == "Darwin":
+                shutil.move(self.current_image, f"{self.working_directory}/{self.category_name}")
+            else:
+                shutil.move(self.current_image, f"{self.working_directory}\\{self.category_name}")
 
 #################### Functions that remove and delete things #######################
 
@@ -592,7 +597,6 @@ class MainWindow(QtWidgets.QWidget):
         ''' Removes all thumbnails that have previously been created. '''
         for i in reversed(range(self.bottom_layout.count())):
             self.bottom_layout.itemAt(i).widget().deleteLater()
-            #self.bottom_layout.itemAt(i).widget().deleteLater()
             QApplication.processEvents()
     
     def clear_img_display(self):
@@ -611,7 +615,17 @@ class MainWindow(QtWidgets.QWidget):
         self.set_category_index()
 
 if __name__ == '__main__': 
-    app = QtWidgets.QApplication(sys.argv) 
-    mw = MainWindow()
-    mw.show() 
+    # Translate asset paths to useable format for PyInstaller
+    def resource_path(relative_path):
+        ''' This is a workaround by Aaron Tan 
+        from his blog https://blog.aaronhktan.com/posts/2018/05/14/pyqt5-pyinstaller-executable '''
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative_path)
+        return os.path.join(os.path.abspath('.'), relative_path)
+
+    app = QtWidgets.QApplication(sys.argv)
+    app.setWindowIcon(QtGui.QIcon(resource_path('./assets/image-organizer-icon.ico'))) 
+    win = MainWindow()
+    qtmodern.styles.dark(app)
+    win.show() 
     sys.exit(app.exec_()) 
