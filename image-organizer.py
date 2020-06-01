@@ -2,9 +2,9 @@ from PyQt5 import QtCore, QtGui, Qt, QtWidgets
 from PyQt5.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
     QGraphicsView, QGridLayout,QLineEdit, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
 from PyQt5.QtGui import QImage, QPixmap
-import sys, os, platform, shutil, qtmodern.styles, qtmodern.windows 
+import sys, os, platform, shutil, qtmodern.styles
 
-    
+
 class ClickFrame(QtWidgets.QFrame):
     clicked = QtCore.pyqtSignal()
 
@@ -59,7 +59,7 @@ class MainWindow(QtWidgets.QWidget):
         # Create Button
         self.create_button =  QtWidgets.QPushButton('Create', self)
         self.create_button.setDisabled(True)
-        self.create_button.clicked.connect(self.create_new_category)                       
+        self.create_button.clicked.connect(self.create_new_category)
 
         # Category Tree View
         self.category_view = QtWidgets.QTreeWidget(self)
@@ -98,9 +98,9 @@ class MainWindow(QtWidgets.QWidget):
         self.image_display = QLabel(self)
         self.image_display.setScaledContents(False)
         self.image_display.setAlignment(QtCore.Qt.AlignCenter)
-         
+
         self.scrolling_display_area.setWidget(self.image_display)
-            
+
         # Image Navigation Buttons
         self.previous_button = QtWidgets.QPushButton("<", self)
         self.previous_button.setFont(self.big_font)
@@ -140,16 +140,17 @@ class MainWindow(QtWidgets.QWidget):
         self.version_label.setText('Created by: Daniel Lukas v0.1.1alpha')
         self.version_label.setDisabled(True)
         self.version_label.setFont(self.itallic_font)
+        self.version_label.setFixedWidth(225)
         self.version_label.setSizePolicy(
-            QtWidgets.QSizePolicy.Minimum,
-            QtWidgets.QSizePolicy.Minimum)
+            QtWidgets.QSizePolicy.Fixed,
+            QtWidgets.QSizePolicy.Fixed)
         self.version_label.setAlignment(QtCore.Qt.AlignRight)
 
         ####################### Layout ########################
 
         # creates the main layout
         self.main_layout = QtWidgets.QVBoxLayout()
-        
+
         # creates the right_layout and adds objects
         self.right_frame = QtWidgets.QFrame(self)
         self.right_frame.setFrameShape(QFrame.StyledPanel)
@@ -157,7 +158,7 @@ class MainWindow(QtWidgets.QWidget):
                 QtWidgets.QSizePolicy.Preferred,
                 QtWidgets.QSizePolicy.Preferred)
         self.right_layout = QtWidgets.QVBoxLayout(self.right_frame)
-        
+
         # selection Layout
         self.top_frame = QtWidgets.QFrame(self)
         self.top_frame.setFrameShape(QFrame.StyledPanel)
@@ -168,21 +169,21 @@ class MainWindow(QtWidgets.QWidget):
         self.path_selection_layout.addWidget(self.browse_button)
         self.path_selection_layout.addWidget(self.selection_input)
         self.path_selection_layout.addWidget(self.import_button)
-        
+
         # Create the main Display and Navigation Layout
         self.image_nav_layout = QtWidgets.QHBoxLayout()
         self.image_nav_layout.addWidget(self.previous_button, 0)
         self.image_nav_layout.addWidget(self.scrolling_display_area, 4)
         self.image_nav_layout.addWidget(self.next_button, 0)
-        
+
         # add selection layout to right_layout
         self.right_layout.addLayout(self.image_nav_layout)
-        
+
         # Category Layout
         self.left_frame = QtWidgets.QFrame(self)
         self.left_frame.setFrameShape(QFrame.StyledPanel)
         self.left_layout = QtWidgets.QVBoxLayout(self.left_frame)
-        
+
         # creates category_new layout
         self.category_create_new_layout = QtWidgets.QHBoxLayout()
         self.category_create_new_layout.addWidget(self.new_category_input)
@@ -246,8 +247,8 @@ class MainWindow(QtWidgets.QWidget):
         if self.selection_input.text() != "":
             self.import_button.setDisabled(False)
         elif self.selection_input.text() == "":
-            self.import_button.setDisabled(True)               
-    
+            self.import_button.setDisabled(True)
+
     def folder_select(self):
         ''' Assignes the selected path to the input box '''
         self.chosen_directory = QFileDialog.getExistingDirectory(self)
@@ -264,7 +265,7 @@ class MainWindow(QtWidgets.QWidget):
                 self.clear_thumbnails()
                 self.clear_img_display()
             self.build_dict()
-            
+
     def create_working_directory(self):
         ''' Assigns the input path to the current working directory '''
         if os.path.exists(self.selection_input.text()) and self.selection_input.text() != "":
@@ -276,7 +277,7 @@ class MainWindow(QtWidgets.QWidget):
             self.loading_msg_label.setText("Importing Images . . .")
         else:
             self.invalid_path = QMessageBox(self)
-            self.invalid_path.warning(self, "Attention", "Invalid file path!")        
+            self.invalid_path.warning(self, "Attention", "Invalid file path!")
 
     def add_wd_to_tree(self):
         ''' Adds the working directory as the root item in the category view '''
@@ -288,13 +289,13 @@ class MainWindow(QtWidgets.QWidget):
             self.WD_item = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
             self.WD_item.setExpanded(True)
             self.category_view.addTopLevelItem(self.WD_item)
-            self.new_category_input.setDisabled(False) 
+            self.new_category_input.setDisabled(False)
         elif "\\" in self.working_directory:
             self.clear_categories_tree()
             self.image_folder = self.working_directory.split("\\")[-1]
             self.WD_item = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
             self.category_view.addTopLevelItem(self.WD_item)
-            
+
     def create_new_category(self):
         ''' Adds a new category to the category_view and category_selector widgets '''
 
@@ -313,7 +314,7 @@ class MainWindow(QtWidgets.QWidget):
         if self.new_category_input.text() != "":
             self.create_button.setDisabled(False)
         elif self.new_category_input.text() == "":
-            self.create_button.setDisabled(True)         
+            self.create_button.setDisabled(True)
 
     def build_dict(self):
         ''' Creates all the dictionaries, lists, and sets to be used,
@@ -332,7 +333,7 @@ class MainWindow(QtWidgets.QWidget):
         # populates lists with the names of all supported images files in the working directory
         for self.file_name in os.listdir():
             self.img_extention_check()
-            if self.img_extention_check() == False: continue 
+            if self.img_extention_check() == False: continue
             self.image_files.append(self.file_name)
             self.sorted_image_files = sorted(self.image_files, key=str.lower,)
         if self.sorted_image_files != []:
@@ -341,12 +342,12 @@ class MainWindow(QtWidgets.QWidget):
             self.add_wd_to_tree()
         elif self.sorted_image_files == []:
             self.loading_msg_label.setText("No valid image files found. Please choose a different folder.")
-        
+
         self.cat_sel_func()
 
     def display_images(self):
-        ''' Displays the first image in the directory ''' 
-        
+        ''' Displays the first image in the directory '''
+
         self.import_button.setDisabled(True)
         self.interactive_widgets_status()
         self.image_index = 0
@@ -355,14 +356,14 @@ class MainWindow(QtWidgets.QWidget):
             700, 700, QtCore.Qt.KeepAspectRatio))
         self.get_current_image()
         self.highlight_selected()
-        
+
 
     def img_extention_check(self):
         ''' Checks all files in the working directory for supported image formats '''
 
         self.img_extentions = ['bmp', 'gif', 'jpg', 'jpeg', 'png', 'pbm', 'pgm', 'ppm', 'tif', 'xbm', 'xpm']
         self.three_char_extention = self.file_name[-3:]
-        self.four_char_extention = self.file_name[-4:] 
+        self.four_char_extention = self.file_name[-4:]
         if self.three_char_extention in self.img_extentions or self.four_char_extention in self.img_extentions:
             return True
         elif self.three_char_extention not in self.img_extentions or self.four_char_extention not in self.img_extentions:
@@ -393,7 +394,7 @@ class MainWindow(QtWidgets.QWidget):
             self.highlight_selected()
         self.get_current_image()
         self.show_category_if_categorized()
-    
+
     def build_selector(self):
         ''' Creates the selection menu for the categories '''
 
@@ -420,7 +421,7 @@ class MainWindow(QtWidgets.QWidget):
         self.cat_sel_layout.addWidget(self.category_selector)
         self.cat_sel_layout.addWidget(self.add_button)
         # Adds the selector to right layout
-        self.right_layout.addWidget(self.cat_frame)    
+        self.right_layout.addWidget(self.cat_frame)
 
     def cat_sel_func(self):
         ''' runs the funtion when the category selection changes '''
@@ -438,7 +439,7 @@ class MainWindow(QtWidgets.QWidget):
         if self.category_index != 0:
             self.add_button.setDisabled(False)
         elif self.category_index == 0:
-            self.add_button.setDisabled(True)    
+            self.add_button.setDisabled(True)
 
     def interactive_widgets_status(self):
         ''' Enables or disables all widgets with conditional dependencies '''
@@ -511,7 +512,7 @@ class MainWindow(QtWidgets.QWidget):
         self.image = QImage(self.thumb_list[self.image_index])
         self.image_display.setPixmap(QPixmap(self.image).scaled(
                 700, 700, QtCore.Qt.KeepAspectRatio))
-        print(self.clicked.objectName())    
+        print(self.clicked.objectName())
         self.unhighlight_all()
         self.show_category_if_categorized()
         #sets the style of the selected thumbnail
@@ -530,7 +531,7 @@ class MainWindow(QtWidgets.QWidget):
         self.organization_btn_status()
 
     def show_category_if_categorized(self):
-        ''' If an image has been added to a category, 
+        ''' If an image has been added to a category,
         that category becomes the current item in the selector when the image is selected '''
 
         self.get_current_image()
@@ -539,14 +540,14 @@ class MainWindow(QtWidgets.QWidget):
             self.category_selector.setCurrentIndex(self.category_index)
         else:
             self.category_selector.setCurrentIndex(0)
-            
+
     def organization_btn_status(self):
         ''' Disables and enables the organize button when the conditions are met '''
         if len(self.file_operation_dict) != 0:
             self.organize_button.setDisabled(False)
         else:
             self.organize_button.setDisabled(True)
-    
+
     def organize_warning_popup(self):
         ''' Displays a popup message to make sure user wants to execute file operations '''
         self.last_chance_message_box = QMessageBox(self)
@@ -572,10 +573,10 @@ class MainWindow(QtWidgets.QWidget):
 
     def organize_images(self):
         ''' Creates a folder in the working directory for every category,
-        and the moves all images to the folder of the category they're added to. ''' 
+        and the moves all images to the folder of the category they're added to. '''
         for self.current_image, self.category_name in self.file_operation_dict.items():
             self.category_folder_set.add(self.category_name)
-        
+
         for self.category_name in self.category_folder_set:
             os.mkdir(f"{self.category_name}")
 
@@ -592,21 +593,21 @@ class MainWindow(QtWidgets.QWidget):
         if self.image_files != []:
             self.selection_input.setText("")
             self.image_files.clear()
-            
+
     def clear_thumbnails(self):
         ''' Removes all thumbnails that have previously been created. '''
         for i in reversed(range(self.bottom_layout.count())):
             self.bottom_layout.itemAt(i).widget().deleteLater()
             QApplication.processEvents()
-    
+
     def clear_img_display(self):
         ''' Removes the image in the main display '''
         self.image_display.clear()
-    
+
     def clear_categories_tree(self):
         ''' Removes all items from the category view widget '''
         self.category_view.clear()
-    
+
     def clear_cat_selector(self):
         ''' Removes all items from the selection menu '''
         self.category_selector.clear()
@@ -614,18 +615,18 @@ class MainWindow(QtWidgets.QWidget):
         self.category_selector.addItem("--Select Category--")
         self.set_category_index()
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     # Translate asset paths to useable format for PyInstaller
     def resource_path(relative_path):
-        ''' This is a workaround by Aaron Tan 
+        ''' This is a workaround by Aaron Tan
         from his blog https://blog.aaronhktan.com/posts/2018/05/14/pyqt5-pyinstaller-executable '''
         if hasattr(sys, '_MEIPASS'):
             return os.path.join(sys._MEIPASS, relative_path)
         return os.path.join(os.path.abspath('.'), relative_path)
 
     app = QtWidgets.QApplication(sys.argv)
-    app.setWindowIcon(QtGui.QIcon(resource_path('./assets/image-organizer-icon.ico'))) 
+    app.setWindowIcon(QtGui.QIcon(resource_path('./assets/image-organizer-icon.ico')))
     win = MainWindow()
     qtmodern.styles.dark(app)
-    win.show() 
-    sys.exit(app.exec_()) 
+    win.show()
+    sys.exit(app.exec_())
