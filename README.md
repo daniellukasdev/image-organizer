@@ -1,7 +1,9 @@
 # image-organizer
 A simple image organizer app created using python 3.7 and pyqt5.
 
-![Image Organizer Logo](image-organizer-interface.png)
+![Image Organizer Interface](image-organizer-interface.png)
+![Image Organizer In Use](image-organizer-interface-with-images.png)
+
 
 _*On Windows you may need to whitelist image-organizer.exe to your antivirus settings_  
 
@@ -22,5 +24,7 @@ _*On Windows you may need to whitelist image-organizer.exe to your antivirus set
 - Add a *Mark-Up* feature to draw on the images. (*maybe*)
 
 # Known Bugs
+- If file extensions are uppercase the image files will be ignored. (Fix coming in next release)
+- Category selection menu items not in alphabetical order.
 - Once a directory is loaded, the first thumbnail does not get highlighted on the second import if the filename of the first image matches that of the filename of the first image currently loaded.
 - Running app icon on Windows only shows generic system icon.
