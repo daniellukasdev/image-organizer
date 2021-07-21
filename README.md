@@ -24,6 +24,7 @@ _*On Windows you may need to whitelist image-organizer.exe to your antivirus set
 - Add a *Mark-Up* feature to draw on the images. (*maybe*)
 
 # Known Bugs
+- Mac OS Big Sur is not currently supported
 - If file extensions are uppercase the image files will be ignored. (Fix coming in next release)
 - Category selection menu items not in alphabetical order.
 - Once a directory is loaded, the first thumbnail does not get highlighted on the second import if the filename of the first image matches that of the filename of the first image currently loaded.
