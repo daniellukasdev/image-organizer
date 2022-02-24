@@ -7,6 +7,18 @@ A simple image organizer app created using python 3.7 and pyqt5.
 
 _*On Windows you may need to whitelist image-organizer.exe to your antivirus settings_  
 
+# Installation & Execution
+## Install Dependencies
+```shell
+pip3 install pyqt5
+pip3 install qtmodern
+```
+## Run From Terminal
+```shell
+cd image-organizer
+python3 image-organizer.py
+```
+
 # How To:
 1. Click *Browse* to get the path to the image folder.
 2. Click *Import* to load all supported images.
@@ -24,7 +36,6 @@ _*On Windows you may need to whitelist image-organizer.exe to your antivirus set
 - Add a *Mark-Up* feature to draw on the images. (*maybe*)
 
 # Known Bugs
-- Mac OS Big Sur is not currently supported
 - If file extensions are uppercase the image files will be ignored. (Fix coming in next release)
 - Category selection menu items not in alphabetical order.
 - Once a directory is loaded, the first thumbnail does not get highlighted on the second import if the filename of the first image matches that of the filename of the first image currently loaded.
