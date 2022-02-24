@@ -574,17 +574,61 @@ class MainWindow(QtWidgets.QWidget):
     def organize_images(self):
         ''' Creates a folder in the working directory for every category,
         and the moves all images to the folder of the category they're added to. '''
+        rename = self.rename_popup()
+        
         for self.current_image, self.category_name in self.file_operation_dict.items():
-            self.category_folder_set.add(self.category_name)
+                self.category_folder_set.add(self.category_name)
 
         for self.category_name in self.category_folder_set:
             os.mkdir(f"{self.category_name}")
-
+        
         for self.current_image, self.category_name in self.file_operation_dict.items():
             if self.current_os == "Linux" or self.current_os == "Darwin":
                 shutil.move(self.current_image, f"{self.working_directory}/{self.category_name}")
             else:
                 shutil.move(self.current_image, f"{self.working_directory}\\{self.category_name}")
+        
+        if rename:
+            if self.current_os == "Linux" or self.current_os == "Darwin":
+                os.chdir(f"{self.working_directory}/{self.category_name}")
+            else:
+                os.chdir(f"{self.working_directory}\\{self.category_name}")
+                
+                
+            index = 0
+            for f in os.listdir():
+                f_name, f_ext = os.path.splitext(f)
+                new_name = "{}{}{}{}".format(self.category_name, "0", index, f_ext)
+                os.rename(f, new_name)
+                index += 1
+            os.chdir(self.working_directory)
+
+################################  Rename Files  ###################################
+
+    def rename_popup(self):
+        ''' Displays a popup message to ask if files should be renamed by category '''
+        self.rename_message_box = QMessageBox(self)
+        self.rename_message_box.setWindowTitle("WARNING!")
+        self.rename_message_box.setIcon(QMessageBox.Warning)
+        self.rename_message_box.setText("Would you like to rename files by category?")
+        self.rename_message_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+        self.rename_yes_button = self.rename_message_box.button(QMessageBox.Yes)
+        self.no_button = self.rename_message_box.button(QMessageBox.No)
+        self.no_button.setText("No")
+
+        self.rename_message_box.exec_()
+
+        if self.rename_message_box.clickedButton() == self.rename_yes_button:
+            return True
+        else: return False
+
+    # def warning_button_clicked(self):
+    #     ''' If the user clicks the yes button, the file operations are executed '''
+    #     if self.warning_popup == QMessageBox.Yes:
+    #         self.rename_files()
+    #     elif self.warning_popup == QMessageBox.Cancel:
+    #         self.rename_message_box.Ignore()
+
 
 #################### Functions that remove and delete things #######################
 
