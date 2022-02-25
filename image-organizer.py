@@ -146,7 +146,9 @@ class MainWindow(QtWidgets.QWidget):
             QtWidgets.QSizePolicy.Fixed)
         self.version_label.setAlignment(QtCore.Qt.AlignRight)
 
-        ####################### Layout ########################
+    #######################################################################
+    ##############################  Layout  ###############################
+    #######################################################################
 
         # creates the main layout
         self.main_layout = QtWidgets.QVBoxLayout()
@@ -622,15 +624,11 @@ class MainWindow(QtWidgets.QWidget):
             return True
         else: return False
 
-    # def warning_button_clicked(self):
-    #     ''' If the user clicks the yes button, the file operations are executed '''
-    #     if self.warning_popup == QMessageBox.Yes:
-    #         self.rename_files()
-    #     elif self.warning_popup == QMessageBox.Cancel:
-    #         self.rename_message_box.Ignore()
 
 
-#################### Functions that remove and delete things #######################
+#######################################################################
+#############  Functions that remove and delete things   ##############
+#######################################################################
 
     def reset_image_list(self):
         ''' Clears the list of image file names '''
