@@ -137,7 +137,7 @@ class MainWindow(QtWidgets.QWidget):
         self.version_label = QLineEdit(self)
         self.version_label.setStyleSheet(
             "border: 1px solid rgb(42,42,42); background-color:transparent; color: rgb(127,127,127);")
-        self.version_label.setText('Created by: Daniel Lukas v0.1.1alpha')
+        self.version_label.setText('Created by: Daniel Lukas v0.2.1alpha')
         self.version_label.setDisabled(True)
         self.version_label.setFont(self.itallic_font)
         self.version_label.setFixedWidth(225)
