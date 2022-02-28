@@ -19,6 +19,17 @@ cd image-organizer
 python3 image-organizer.py
 ```
 
+## Changelog
+
+### version 0.2.1
+- Added option to rename files based on category
+### version 0.1.1
+- Basic functionality:
+    - Loads images from chosen directory
+    - Thumbnails are selectable
+    - Creates directories from categories
+    - Moves images to selected directory
+
 # How To:
 1. Click *Browse* to get the path to the image folder.
 2. Click *Import* to load all supported images.
@@ -33,6 +44,7 @@ python3 image-organizer.py
 - Add the ability to simply press the enter button instead of having to click every button.
 - Add the use of the keyboard to navigate through the thumbnails.
 - Look into multiple image selection.
+- Rework selecting categories
 - Add a *Mark-Up* feature to draw on the images. (*maybe*)
 
 # Known Bugs
