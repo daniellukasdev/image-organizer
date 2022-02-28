@@ -667,7 +667,7 @@ if __name__ == '__main__':
         return os.path.join(os.path.abspath('.'), relative_path)
 
     app = QtWidgets.QApplication(sys.argv)
-    app.setWindowIcon(QtGui.QIcon(resource_path('./assets/image-organizer-icon.ico')))
+    app.setWindowIcon(QtGui.QIcon(resource_path('image-organizer-icon.png')))
     win = MainWindow()
     qtmodern.styles.dark(app)
     win.show()
