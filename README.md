@@ -21,14 +21,15 @@ python3 image-organizer.py
 
 ## Changelog
 
-### version 0.2.1
+### Latest
+**2022.02.28**
+_version 0.2.1alpha_
+
 - Added option to rename files based on category
-### version 0.1.1
-- Basic functionality:
-    - Loads images from chosen directory
-    - Thumbnails are selectable
-    - Creates directories from categories
-    - Moves images to selected directory
+- Option is currently presented as a pop-up
+
+_See [changelog](./changelog.md) for full history_
+
 
 # How To:
 1. Click *Browse* to get the path to the image folder.
