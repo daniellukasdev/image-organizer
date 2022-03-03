@@ -1,8 +1,10 @@
 # image-organizer
 A simple image organizer app created using python 3.7 and pyqt5.
 
-![Image Organizer Interface](image-organizer-interface.png)
-![Image Organizer In Use](image-organizer-interface-with-images.png)
+
+![image-organizer-interface](https://user-images.githubusercontent.com/65349554/156636831-8a84e9aa-cd1b-48e3-9f65-db1674662c7d.png)
+
+![image-organizer-interface-with-images](https://user-images.githubusercontent.com/65349554/156636674-58906f19-5b28-4e37-851c-1f5b7f9c8323.png)
 
 
 _*On Windows you may need to whitelist image-organizer.exe to your antivirus settings_  
