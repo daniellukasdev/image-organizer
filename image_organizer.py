@@ -69,8 +69,8 @@ class MainWindow(QWidget):
         self.category_view.sortByColumn(0,QtCore.Qt.SortOrder.AscendingOrder)
         self.category_view.setAlternatingRowColors(True)
         self.category_view.setSizePolicy(
-            QSizePolicy.Preferred,
-            QSizePolicy.Preferred)
+            QSizePolicy.Policy.Preferred,
+            QSizePolicy.Policy.Preferred)
 
         # Organize button and label
         self.organization_label = QtWidgets.QLabel('This operation cannot be undone!')
@@ -85,7 +85,7 @@ class MainWindow(QWidget):
         self.organize_button.setFixedWidth(125)
         self.organize_button.setSizePolicy(
             QSizePolicy.Fixed,
-            QSizePolicy.Preferred)
+            QSizePolicy.Policy.Preferred)
         self.organize_button.clicked.connect(self.organize_warning_popup)
         self.organize_button.setDisabled(True)
 
@@ -108,7 +108,7 @@ class MainWindow(QWidget):
         self.previous_button.setMaximumWidth(25)
         self.previous_button.setSizePolicy(
             QSizePolicy.Fixed,
-            QSizePolicy.Preferred)
+            QSizePolicy.Policy.Preferred)
         self.previous_button.clicked.connect(self.previous_image)
         self.previous_button.setDisabled(True)
 
@@ -117,7 +117,7 @@ class MainWindow(QWidget):
         self.next_button.setMaximumWidth(25)
         self.next_button.setSizePolicy(
             QSizePolicy.Fixed,
-            QSizePolicy.Preferred)
+            QSizePolicy.Policy.Preferred)
         self.next_button.clicked.connect(self.next_image)
         self.next_button.setDisabled(True)
 
@@ -158,15 +158,15 @@ class MainWindow(QWidget):
         self.right_frame = QtWidgets.QFrame(self)
         self.right_frame.setFrameShape(QFrame.StyledPanel)
         self.right_frame.setSizePolicy(
-                QSizePolicy.Preferred,
-                QSizePolicy.Preferred)
+                QSizePolicy.Policy.Preferred,
+                QSizePolicy.Policy.Preferred)
         self.right_layout = QtWidgets.QVBoxLayout(self.right_frame)
 
         # selection Layout
         self.top_frame = QtWidgets.QFrame(self)
         self.top_frame.setFrameShape(QFrame.StyledPanel)
         self.top_frame.setSizePolicy(
-                QSizePolicy.Preferred,
+                QSizePolicy.Policy.Preferred,
                 QSizePolicy.Fixed)
         self.path_selection_layout = QtWidgets.QHBoxLayout(self.top_frame)
         self.path_selection_layout.addWidget(self.browse_button)
@@ -200,7 +200,7 @@ class MainWindow(QWidget):
         self.horizontal_splitter = QSplitter(QtCore.Qt.Horizontal)
         self.horizontal_splitter.setSizePolicy(
             QSizePolicy.Fixed,
-            QSizePolicy.Preferred)
+            QSizePolicy.Policy.Preferred)
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
         self.horizontal_splitter.setStretchFactor(1,5)
@@ -217,7 +217,7 @@ class MainWindow(QWidget):
         self.bottom_frame = QtWidgets.QFrame(self)
         self.bottom_frame.setFrameShape(QFrame.StyledPanel)
         self.bottom_frame.setSizePolicy(
-                QSizePolicy.Preferred,
+                QSizePolicy.Policy.Preferred,
                 QSizePolicy.Minimum)
         self.bottom_layout = QtWidgets.QHBoxLayout(self.bottom_frame)
         self.bottom_layout.setSpacing(10)
@@ -405,7 +405,7 @@ class MainWindow(QWidget):
         self.category_selector = QtWidgets.QComboBox(self)
         self.category_selector.setDisabled(True)
         self.category_selector.setSizePolicy(
-            QSizePolicy.Preferred,
+            QSizePolicy.Policy.Preferred,
             QSizePolicy.Fixed)
         # Add Button
         self.add_button =  QtWidgets.QPushButton('Add', self)
@@ -418,7 +418,7 @@ class MainWindow(QWidget):
         self.cat_frame = QtWidgets.QFrame(self)
         self.cat_frame.setFrameShape(QFrame.StyledPanel)
         self.cat_frame.setSizePolicy(
-                QSizePolicy.Preferred,
+                QSizePolicy.Policy.Preferred,
                 QSizePolicy.Fixed)
         self.cat_sel_layout = QtWidgets.QHBoxLayout(self.cat_frame)
         self.cat_sel_layout.addWidget(self.category_selector)
@@ -472,7 +472,7 @@ class MainWindow(QWidget):
             self.thumb_txt = QLabel(self.file_name, self)
             self.image_index_list.append(self.image_index)
             self.thumb_txt.setSizePolicy(
-                QSizePolicy.Preferred,
+                QSizePolicy.Policy.Preferred,
                 QSizePolicy.MinimumExpanding)
             self.thumb_txt.setWordWrap(True)
             self.thumb_img.setAlignment(QtCore.Qt.AlignCenter)
