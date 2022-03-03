@@ -92,8 +92,8 @@ class MainWindow(QWidget):
 
         # Image Viewer Label and Scroll Area
         self.scrolling_display_area = QtWidgets.QScrollArea(self)
-        self.scrolling_display_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.scrolling_display_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrolling_display_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scrolling_display_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrolling_display_area.setWidgetResizable(True)
 
         self.image_display = QLabel(self)
@@ -210,8 +210,8 @@ class MainWindow(QWidget):
 
         # Grid View Scroll Area
         self.scrolling_grid_area = QtWidgets.QScrollArea(self)
-        self.scrolling_grid_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.scrolling_grid_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrolling_grid_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scrolling_grid_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrolling_grid_area.setWidgetResizable(True)
 
         self.bottom_frame = QtWidgets.QFrame(self)
