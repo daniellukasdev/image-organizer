@@ -1,7 +1,8 @@
-from PyQt5 import QtCore, Qt, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
+from PyQt6 import QtCore, QtGui, QtWidgets
+# from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
     QGraphicsView, QGridLayout,QLineEdit, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt6.QtGui import QImage, QPixmap
 import sys, os, platform, shutil, qtmodern.styles
 
 
@@ -65,7 +66,7 @@ class MainWindow(QtWidgets.QWidget):
         self.category_view = QtWidgets.QTreeWidget(self)
         self.category_view.setHeaderLabel('Categories')
         self.category_view.setSortingEnabled(True)
-        self.category_view.sortByColumn(0,QtCore.Qt.AscendingOrder)
+        self.category_view.sortByColumn(0,QtCore.Qt.SortOrder.AscendingOrder)
         self.category_view.setAlternatingRowColors(True)
         self.category_view.setSizePolicy(
             QtWidgets.QSizePolicy.Preferred,
@@ -305,7 +306,7 @@ class MainWindow(QtWidgets.QWidget):
             self.category = QtWidgets.QTreeWidgetItem(self.WD_item,[self.new_category_input.text()])
             self.category_view.addTopLevelItem(self.category)
             self.category_selector.addItem(self.new_category_input.text())
-            self.category_selector.model().sort(0, QtCore.Qt.AscendingOrder)
+            self.category_selector.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
             self.new_category_input.clear()
             QApplication.processEvents()
             self.interactive_widgets_status()
