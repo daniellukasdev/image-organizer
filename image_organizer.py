@@ -156,7 +156,7 @@ class MainWindow(QWidget):
 
         # creates the right_layout and adds objects
         self.right_frame = QtWidgets.QFrame(self)
-        self.right_frame.setFrameShape(QFrame.StyledPanel)
+        self.right_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.right_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.Policy.Preferred)
@@ -164,7 +164,7 @@ class MainWindow(QWidget):
 
         # selection Layout
         self.top_frame = QtWidgets.QFrame(self)
-        self.top_frame.setFrameShape(QFrame.StyledPanel)
+        self.top_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.top_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.Policy.Fixed)
@@ -184,7 +184,7 @@ class MainWindow(QWidget):
 
         # Category Layout
         self.left_frame = QtWidgets.QFrame(self)
-        self.left_frame.setFrameShape(QFrame.StyledPanel)
+        self.left_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.left_layout = QtWidgets.QVBoxLayout(self.left_frame)
 
         # creates category_new layout
@@ -215,7 +215,7 @@ class MainWindow(QWidget):
         self.scrolling_grid_area.setWidgetResizable(True)
 
         self.bottom_frame = QtWidgets.QFrame(self)
-        self.bottom_frame.setFrameShape(QFrame.StyledPanel)
+        self.bottom_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.bottom_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.Minimum)
@@ -416,7 +416,7 @@ class MainWindow(QWidget):
         self.add_button.setDisabled(True)
         # Creates the category selector layout
         self.cat_frame = QtWidgets.QFrame(self)
-        self.cat_frame.setFrameShape(QFrame.StyledPanel)
+        self.cat_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.cat_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.Policy.Fixed)
