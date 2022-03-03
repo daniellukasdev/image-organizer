@@ -84,7 +84,7 @@ class MainWindow(QWidget):
         self.organize_button.setFont(self.big_font)
         self.organize_button.setFixedWidth(125)
         self.organize_button.setSizePolicy(
-            QSizePolicy.Fixed,
+            QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Preferred)
         self.organize_button.clicked.connect(self.organize_warning_popup)
         self.organize_button.setDisabled(True)
@@ -107,7 +107,7 @@ class MainWindow(QWidget):
         self.previous_button.setFont(self.big_font)
         self.previous_button.setMaximumWidth(25)
         self.previous_button.setSizePolicy(
-            QSizePolicy.Fixed,
+            QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Preferred)
         self.previous_button.clicked.connect(self.previous_image)
         self.previous_button.setDisabled(True)
@@ -116,7 +116,7 @@ class MainWindow(QWidget):
         self.next_button.setFont(self.big_font)
         self.next_button.setMaximumWidth(25)
         self.next_button.setSizePolicy(
-            QSizePolicy.Fixed,
+            QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Preferred)
         self.next_button.clicked.connect(self.next_image)
         self.next_button.setDisabled(True)
@@ -130,7 +130,7 @@ class MainWindow(QWidget):
         self.loading_msg_label.setFont(self.itallic_font)
         self.loading_msg_label.setSizePolicy(
             QSizePolicy.Expanding,
-            QSizePolicy.Fixed)
+            QSizePolicy.Policy.Fixed)
         self.loading_msg_label.setAlignment(QtCore.Qt.AlignLeft)
         self.loading_msg_label.textChanged[str].connect(self.loading_msg_check)
 
@@ -143,8 +143,8 @@ class MainWindow(QWidget):
         self.version_label.setFont(self.itallic_font)
         self.version_label.setFixedWidth(225)
         self.version_label.setSizePolicy(
-            QSizePolicy.Fixed,
-            QSizePolicy.Fixed)
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed)
         self.version_label.setAlignment(QtCore.Qt.AlignRight)
 
     #######################################################################
@@ -167,7 +167,7 @@ class MainWindow(QWidget):
         self.top_frame.setFrameShape(QFrame.StyledPanel)
         self.top_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
-                QSizePolicy.Fixed)
+                QSizePolicy.Policy.Fixed)
         self.path_selection_layout = QtWidgets.QHBoxLayout(self.top_frame)
         self.path_selection_layout.addWidget(self.browse_button)
         self.path_selection_layout.addWidget(self.selection_input)
@@ -199,7 +199,7 @@ class MainWindow(QWidget):
         # Creates the horizontal splitter
         self.horizontal_splitter = QSplitter(QtCore.Qt.Horizontal)
         self.horizontal_splitter.setSizePolicy(
-            QSizePolicy.Fixed,
+            QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Preferred)
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
@@ -406,12 +406,12 @@ class MainWindow(QWidget):
         self.category_selector.setDisabled(True)
         self.category_selector.setSizePolicy(
             QSizePolicy.Policy.Preferred,
-            QSizePolicy.Fixed)
+            QSizePolicy.Policy.Fixed)
         # Add Button
         self.add_button =  QtWidgets.QPushButton('Add', self)
         self.add_button.setSizePolicy(
-            QSizePolicy.Fixed,
-                QSizePolicy.Fixed)
+            QSizePolicy.Policy.Fixed,
+                QSizePolicy.Policy.Fixed)
         self.add_button.clicked.connect(self.build_file_operation_dict)
         self.add_button.setDisabled(True)
         # Creates the category selector layout
@@ -419,7 +419,7 @@ class MainWindow(QWidget):
         self.cat_frame.setFrameShape(QFrame.StyledPanel)
         self.cat_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
-                QSizePolicy.Fixed)
+                QSizePolicy.Policy.Fixed)
         self.cat_sel_layout = QtWidgets.QHBoxLayout(self.cat_frame)
         self.cat_sel_layout.addWidget(self.category_selector)
         self.cat_sel_layout.addWidget(self.add_button)
@@ -482,8 +482,8 @@ class MainWindow(QWidget):
             self.thumb_frame = ClickFrame(self)
             self.thumb_frame.clicked.connect(self.thumbnail_click)
             self.thumb_frame.setSizePolicy(
-                QSizePolicy.Fixed,
-                QSizePolicy.Fixed)
+                QSizePolicy.Policy.Fixed,
+                QSizePolicy.Policy.Fixed)
             # assigns a name to every frame created so that they are directly accessible
             self.thumb_frame.setObjectName(self.file_name)
             self.thumb_list.append(self.thumb_frame.objectName())
