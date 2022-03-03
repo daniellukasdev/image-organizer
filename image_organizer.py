@@ -131,7 +131,7 @@ class MainWindow(QWidget):
         self.loading_msg_label.setSizePolicy(
             QSizePolicy.Policy.Expanding,
             QSizePolicy.Policy.Fixed)
-        self.loading_msg_label.setAlignment(QtCore.Qt.AlignLeft)
+        self.loading_msg_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self.loading_msg_label.textChanged[str].connect(self.loading_msg_check)
 
         # version number
