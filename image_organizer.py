@@ -78,8 +78,8 @@ class MainWindow(QWidget):
         self.organization_label.setFont(self.itallic_font)
         self.organization_label.setWordWrap(True)
         self.organization_label.setSizePolicy(
-            QSizePolicy.MinimumExpanding,
-            QSizePolicy.MinimumExpanding)
+            QSizePolicy.Policy.MinimumExpanding,
+            QSizePolicy.Policy.MinimumExpanding)
         self.organize_button = QtWidgets.QPushButton('Organize', self)
         self.organize_button.setFont(self.big_font)
         self.organize_button.setFixedWidth(125)
@@ -473,7 +473,7 @@ class MainWindow(QWidget):
             self.image_index_list.append(self.image_index)
             self.thumb_txt.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
-                QSizePolicy.MinimumExpanding)
+                QSizePolicy.Policy.MinimumExpanding)
             self.thumb_txt.setWordWrap(True)
             self.thumb_img.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             self.thumb_txt.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
