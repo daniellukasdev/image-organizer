@@ -74,7 +74,7 @@ class MainWindow(QWidget):
 
         # Organize button and label
         self.organization_label = QtWidgets.QLabel('This operation cannot be undone!')
-        self.organization_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.organization_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.organization_label.setFont(self.itallic_font)
         self.organization_label.setWordWrap(True)
         self.organization_label.setSizePolicy(
@@ -98,7 +98,7 @@ class MainWindow(QWidget):
 
         self.image_display = QLabel(self)
         self.image_display.setScaledContents(False)
-        self.image_display.setAlignment(QtCore.Qt.AlignCenter)
+        self.image_display.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.scrolling_display_area.setWidget(self.image_display)
 
@@ -194,7 +194,7 @@ class MainWindow(QWidget):
 
         self.left_layout.addLayout(self.category_create_new_layout, 0)
         self.left_layout.addWidget(self.category_view, 1)
-        self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignCenter)
+        self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Creates the horizontal splitter
         self.horizontal_splitter = QSplitter(QtCore.Qt.Horizontal)
@@ -475,8 +475,8 @@ class MainWindow(QWidget):
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.MinimumExpanding)
             self.thumb_txt.setWordWrap(True)
-            self.thumb_img.setAlignment(QtCore.Qt.AlignCenter)
-            self.thumb_txt.setAlignment(QtCore.Qt.AlignCenter)
+            self.thumb_img.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            self.thumb_txt.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             self.thumb_img.setPixmap(QPixmap(self.thumb_main_img).scaled(
                 125, 125, QtCore.Qt.KeepAspectRatio))
             self.thumb_frame = ClickFrame(self)
