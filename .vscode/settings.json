@@ -1,0 +1,6 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    // "python.terminal.activateEnvironment":true,
+    // "python.defaultInterpreterPath": "/usr/local/anaconda3/envs/image-organizer-env/bin/python"
+}
