@@ -129,7 +129,7 @@ class MainWindow(QWidget):
         self.loading_msg_label.setDisabled(True)
         self.loading_msg_label.setFont(self.itallic_font)
         self.loading_msg_label.setSizePolicy(
-            QSizePolicy.Expanding,
+            QSizePolicy.Policy.Expanding,
             QSizePolicy.Policy.Fixed)
         self.loading_msg_label.setAlignment(QtCore.Qt.AlignLeft)
         self.loading_msg_label.textChanged[str].connect(self.loading_msg_check)
