@@ -145,7 +145,7 @@ class MainWindow(QWidget):
         self.version_label.setSizePolicy(
             QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Fixed)
-        self.version_label.setAlignment(QtCore.Qt.AlignRight)
+        self.version_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
 
     #######################################################################
     ##############################  Layout  ###############################
