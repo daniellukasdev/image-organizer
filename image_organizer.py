@@ -218,7 +218,7 @@ class MainWindow(QWidget):
         self.bottom_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.bottom_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
-                QSizePolicy.Minimum)
+                QSizePolicy.Policy.Minimum)
         self.bottom_layout = QtWidgets.QHBoxLayout(self.bottom_frame)
         self.bottom_layout.setSpacing(10)
         self.scrolling_grid_area.setWidget(self.bottom_frame)
