@@ -197,7 +197,7 @@ class MainWindow(QWidget):
         self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Creates the horizontal splitter
-        self.horizontal_splitter = QSplitter(QtCore.Qt.Horizontal)
+        self.horizontal_splitter = QSplitter(QtCore.Qt.Orientation.Horizontal)
         self.horizontal_splitter.setSizePolicy(
             QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Preferred)
