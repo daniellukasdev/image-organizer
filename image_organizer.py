@@ -562,7 +562,7 @@ class MainWindow(QWidget):
         self.no_button = self.last_chance_message_box.button(QMessageBox.StandardButton.No)
         self.no_button.setText("Cancel")
 
-        self.last_chance_message_box.exec_()
+        self.last_chance_message_box.exec()
 
         if self.last_chance_message_box.clickedButton() == self.yes_button:
             self.organize_images()
@@ -619,7 +619,7 @@ class MainWindow(QWidget):
         self.no_button = self.rename_message_box.button(QMessageBox.StandardButton.No)
         self.no_button.setText("No")
 
-        self.rename_message_box.exec_()
+        self.rename_message_box.exec()
 
         if self.rename_message_box.clickedButton() == self.rename_yes_button:
             return True
@@ -672,4 +672,4 @@ if __name__ == '__main__':
     win = MainWindow()
     qtmodern.styles.dark(app)
     win.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
