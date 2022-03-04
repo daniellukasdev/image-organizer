@@ -356,7 +356,7 @@ class MainWindow(QWidget):
         self.image_index = 0
         self.image = QImage(self.thumb_list[self.image_index])
         self.image_display.setPixmap(QPixmap(self.image).scaled(
-            700, 700, QtCore.Qt.KeepAspectRatio))
+            700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
         self.get_current_image()
         self.highlight_selected()
 
@@ -379,7 +379,7 @@ class MainWindow(QWidget):
             self.image_index = self.image_index-1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
-                700, 700, QtCore.Qt.KeepAspectRatio))
+                700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.unhighlight_all()
             self.highlight_selected()
         self.get_current_image()
@@ -392,7 +392,7 @@ class MainWindow(QWidget):
             self.image_index = self.image_index+1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
-                700, 700, QtCore.Qt.KeepAspectRatio))
+                700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.unhighlight_all()
             self.highlight_selected()
         self.get_current_image()
@@ -478,7 +478,7 @@ class MainWindow(QWidget):
             self.thumb_img.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             self.thumb_txt.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             self.thumb_img.setPixmap(QPixmap(self.thumb_main_img).scaled(
-                125, 125, QtCore.Qt.KeepAspectRatio))
+                125, 125, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.thumb_frame = ClickFrame(self)
             self.thumb_frame.clicked.connect(self.thumbnail_click)
             self.thumb_frame.setSizePolicy(
@@ -514,7 +514,7 @@ class MainWindow(QWidget):
         self.image_index = self.thumb_dict[self.clicked.objectName()]
         self.image = QImage(self.thumb_list[self.image_index])
         self.image_display.setPixmap(QPixmap(self.image).scaled(
-                700, 700, QtCore.Qt.KeepAspectRatio))
+                700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
         print(self.clicked.objectName())
         self.unhighlight_all()
         self.show_category_if_categorized()
@@ -555,7 +555,7 @@ class MainWindow(QWidget):
         ''' Displays a popup message to make sure user wants to execute file operations '''
         self.last_chance_message_box = QMessageBox(self)
         self.last_chance_message_box.setWindowTitle("WARNING!")
-        self.last_chance_message_box.setIcon(QMessageBox.Warning)
+        self.last_chance_message_box.setIcon(QMessageBox.Icon.Warning)
         self.last_chance_message_box.setText("This operation cannot be undone! Do you wish to continue?")
         self.last_chance_message_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
         self.yes_button = self.last_chance_message_box.button(QMessageBox.Yes)
@@ -612,7 +612,7 @@ class MainWindow(QWidget):
         ''' Displays a popup message to ask if files should be renamed by category '''
         self.rename_message_box = QMessageBox(self)
         self.rename_message_box.setWindowTitle("WARNING!")
-        self.rename_message_box.setIcon(QMessageBox.Warning)
+        self.rename_message_box.setIcon(QMessageBox.Icon.Warning)
         self.rename_message_box.setText("Would you like to rename files by category?")
         self.rename_message_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
         self.rename_yes_button = self.rename_message_box.button(QMessageBox.Yes)
