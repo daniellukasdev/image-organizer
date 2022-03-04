@@ -433,7 +433,7 @@ class MainWindow(QWidget):
     def set_category_index(self):
         ''' finds the index of the selected category item '''
         self.category_name = self.category_selector.currentText()
-        self.category_index = self.category_selector.findText(self.category_name, QtCore.Qt.MatchFixedString)
+        self.category_index = self.category_selector.findText(self.category_name, QtCore.Qt.MatchFlag.MatchFixedString)
         self.category_selector.setCurrentIndex(self.category_index)
 
     def add_btn_status(self):
@@ -539,7 +539,7 @@ class MainWindow(QWidget):
 
         self.get_current_image()
         if self.current_image in self.file_operation_dict.keys():
-            self.category_index = self.category_selector.findText(self.file_operation_dict[self.current_image], QtCore.Qt.MatchFixedString)
+            self.category_index = self.category_selector.findText(self.file_operation_dict[self.current_image], QtCore.Qt.MatchFlag.MatchFixedString)
             self.category_selector.setCurrentIndex(self.category_index)
         else:
             self.category_selector.setCurrentIndex(0)
