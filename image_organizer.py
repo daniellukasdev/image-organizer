@@ -224,7 +224,7 @@ class MainWindow(QWidget):
         self.scrolling_grid_area.setWidget(self.bottom_frame)
 
         # Creates the vertical splitter
-        self.vertical_splitter = QSplitter(QtCore.Qt.Vertical)
+        self.vertical_splitter = QSplitter(QtCore.Qt.Orientation.Vertical)
         self.vertical_splitter.addWidget(self.horizontal_splitter)
         self.vertical_splitter.addWidget(self.scrolling_grid_area)
         self.vertical_splitter.setStretchFactor(10,1)
