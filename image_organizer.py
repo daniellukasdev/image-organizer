@@ -557,9 +557,9 @@ class MainWindow(QWidget):
         self.last_chance_message_box.setWindowTitle("WARNING!")
         self.last_chance_message_box.setIcon(QMessageBox.Icon.Warning)
         self.last_chance_message_box.setText("This operation cannot be undone! Do you wish to continue?")
-        self.last_chance_message_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
-        self.yes_button = self.last_chance_message_box.button(QMessageBox.Yes)
-        self.no_button = self.last_chance_message_box.button(QMessageBox.No)
+        self.last_chance_message_box.setStandardButtons(QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)
+        self.yes_button = self.last_chance_message_box.button(QMessageBox.StandardButton.Yes)
+        self.no_button = self.last_chance_message_box.button(QMessageBox.StandardButton.No)
         self.no_button.setText("Cancel")
 
         self.last_chance_message_box.exec_()
@@ -569,7 +569,7 @@ class MainWindow(QWidget):
 
     def warning_button_clicked(self):
         ''' If the user clicks the yes button, the file operations are executed '''
-        if self.warning_popup == QMessageBox.Yes:
+        if self.warning_popup == QMessageBox.StandardButton.Yes:
             self.organize_images()
         elif self.warning_popup == QMessageBox.Cancel:
             self.last_chance_message_box.Ignore()
@@ -614,9 +614,9 @@ class MainWindow(QWidget):
         self.rename_message_box.setWindowTitle("WARNING!")
         self.rename_message_box.setIcon(QMessageBox.Icon.Warning)
         self.rename_message_box.setText("Would you like to rename files by category?")
-        self.rename_message_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
-        self.rename_yes_button = self.rename_message_box.button(QMessageBox.Yes)
-        self.no_button = self.rename_message_box.button(QMessageBox.No)
+        self.rename_message_box.setStandardButtons(QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)
+        self.rename_yes_button = self.rename_message_box.button(QMessageBox.StandardButton.Yes)
+        self.no_button = self.rename_message_box.button(QMessageBox.StandardButton.No)
         self.no_button.setText("No")
 
         self.rename_message_box.exec_()
