@@ -1,5 +1,5 @@
 # image-organizer
-A simple image organizer app created using python 3.7 and pyqt5.
+A simple image organizer app created using python 3.9 and PyQt6.
 
 
 ![image-organizer-interface](https://user-images.githubusercontent.com/65349554/156636831-8a84e9aa-cd1b-48e3-9f65-db1674662c7d.png)
