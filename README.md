@@ -51,7 +51,6 @@ _See [changelog](./changelog.md) for full history_
 - Add a *Mark-Up* feature to draw on the images. (*maybe*)
 
 # Known Bugs
-- If file extensions are uppercase the image files will be ignored. (Fix coming in next release)
-- Category selection menu items not in alphabetical order.
+- If file extensions are uppercase the image files will be ignored.
 - Once a directory is loaded, the first thumbnail does not get highlighted on the second import if the filename of the first image matches that of the filename of the first image currently loaded.
 - Running app icon on Windows only shows generic system icon.
