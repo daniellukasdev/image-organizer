@@ -1,8 +1,10 @@
-from PyQt5 import QtCore, QtGui, Qt, QtWidgets
-from PyQt5.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
+from PyQt6 import QtCore, QtGui, QtWidgets
+# from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
     QGraphicsView, QGridLayout,QLineEdit, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
-from PyQt5.QtGui import QImage, QPixmap
-import sys, os, platform, shutil, qtmodern.styles
+from PyQt6.QtGui import QImage, QPixmap
+import sys, os, platform, shutil
+# qtmodern.styles
 
 
 class ClickFrame(QtWidgets.QFrame):
@@ -12,7 +14,7 @@ class ClickFrame(QtWidgets.QFrame):
         self.clicked.emit()
         QtWidgets.QFrame.mousePressEvent(self, event)
 
-class MainWindow(QtWidgets.QWidget):
+class MainWindow(QWidget):
 
     def __init__(self, *args, **kwargs):
         '''MainWindow Constructor'''
@@ -65,39 +67,39 @@ class MainWindow(QtWidgets.QWidget):
         self.category_view = QtWidgets.QTreeWidget(self)
         self.category_view.setHeaderLabel('Categories')
         self.category_view.setSortingEnabled(True)
-        self.category_view.sortByColumn(0,QtCore.Qt.AscendingOrder)
+        self.category_view.sortByColumn(0,QtCore.Qt.SortOrder.AscendingOrder)
         self.category_view.setAlternatingRowColors(True)
         self.category_view.setSizePolicy(
-            QtWidgets.QSizePolicy.Preferred,
-            QtWidgets.QSizePolicy.Preferred)
+            QSizePolicy.Policy.Preferred,
+            QSizePolicy.Policy.Preferred)
 
         # Organize button and label
         self.organization_label = QtWidgets.QLabel('This operation cannot be undone!')
-        self.organization_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.organization_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.organization_label.setFont(self.itallic_font)
         self.organization_label.setWordWrap(True)
         self.organization_label.setSizePolicy(
-            QtWidgets.QSizePolicy.MinimumExpanding,
-            QtWidgets.QSizePolicy.MinimumExpanding)
+            QSizePolicy.Policy.MinimumExpanding,
+            QSizePolicy.Policy.MinimumExpanding)
         self.organize_button = QtWidgets.QPushButton('Organize', self)
         self.organize_button.setFont(self.big_font)
         self.organize_button.setFixedWidth(125)
         self.organize_button.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed,
-            QtWidgets.QSizePolicy.Preferred)
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Preferred)
         self.organize_button.clicked.connect(self.organize_warning_popup)
         self.organize_button.setDisabled(True)
 
 
         # Image Viewer Label and Scroll Area
         self.scrolling_display_area = QtWidgets.QScrollArea(self)
-        self.scrolling_display_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.scrolling_display_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrolling_display_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scrolling_display_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrolling_display_area.setWidgetResizable(True)
 
         self.image_display = QLabel(self)
         self.image_display.setScaledContents(False)
-        self.image_display.setAlignment(QtCore.Qt.AlignCenter)
+        self.image_display.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.scrolling_display_area.setWidget(self.image_display)
 
@@ -106,8 +108,8 @@ class MainWindow(QtWidgets.QWidget):
         self.previous_button.setFont(self.big_font)
         self.previous_button.setMaximumWidth(25)
         self.previous_button.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed,
-            QtWidgets.QSizePolicy.Preferred)
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Preferred)
         self.previous_button.clicked.connect(self.previous_image)
         self.previous_button.setDisabled(True)
 
@@ -115,8 +117,8 @@ class MainWindow(QtWidgets.QWidget):
         self.next_button.setFont(self.big_font)
         self.next_button.setMaximumWidth(25)
         self.next_button.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed,
-            QtWidgets.QSizePolicy.Preferred)
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Preferred)
         self.next_button.clicked.connect(self.next_image)
         self.next_button.setDisabled(True)
 
@@ -128,9 +130,9 @@ class MainWindow(QtWidgets.QWidget):
         self.loading_msg_label.setDisabled(True)
         self.loading_msg_label.setFont(self.itallic_font)
         self.loading_msg_label.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding,
-            QtWidgets.QSizePolicy.Fixed)
-        self.loading_msg_label.setAlignment(QtCore.Qt.AlignLeft)
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed)
+        self.loading_msg_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self.loading_msg_label.textChanged[str].connect(self.loading_msg_check)
 
         # version number
@@ -142,9 +144,9 @@ class MainWindow(QtWidgets.QWidget):
         self.version_label.setFont(self.itallic_font)
         self.version_label.setFixedWidth(225)
         self.version_label.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed,
-            QtWidgets.QSizePolicy.Fixed)
-        self.version_label.setAlignment(QtCore.Qt.AlignRight)
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed)
+        self.version_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
 
     #######################################################################
     ##############################  Layout  ###############################
@@ -155,18 +157,18 @@ class MainWindow(QtWidgets.QWidget):
 
         # creates the right_layout and adds objects
         self.right_frame = QtWidgets.QFrame(self)
-        self.right_frame.setFrameShape(QFrame.StyledPanel)
+        self.right_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.right_frame.setSizePolicy(
-                QtWidgets.QSizePolicy.Preferred,
-                QtWidgets.QSizePolicy.Preferred)
+                QSizePolicy.Policy.Preferred,
+                QSizePolicy.Policy.Preferred)
         self.right_layout = QtWidgets.QVBoxLayout(self.right_frame)
 
         # selection Layout
         self.top_frame = QtWidgets.QFrame(self)
-        self.top_frame.setFrameShape(QFrame.StyledPanel)
+        self.top_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.top_frame.setSizePolicy(
-                QtWidgets.QSizePolicy.Preferred,
-                QtWidgets.QSizePolicy.Fixed)
+                QSizePolicy.Policy.Preferred,
+                QSizePolicy.Policy.Fixed)
         self.path_selection_layout = QtWidgets.QHBoxLayout(self.top_frame)
         self.path_selection_layout.addWidget(self.browse_button)
         self.path_selection_layout.addWidget(self.selection_input)
@@ -183,7 +185,7 @@ class MainWindow(QtWidgets.QWidget):
 
         # Category Layout
         self.left_frame = QtWidgets.QFrame(self)
-        self.left_frame.setFrameShape(QFrame.StyledPanel)
+        self.left_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.left_layout = QtWidgets.QVBoxLayout(self.left_frame)
 
         # creates category_new layout
@@ -193,13 +195,13 @@ class MainWindow(QtWidgets.QWidget):
 
         self.left_layout.addLayout(self.category_create_new_layout, 0)
         self.left_layout.addWidget(self.category_view, 1)
-        self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignCenter)
+        self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Creates the horizontal splitter
-        self.horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
+        self.horizontal_splitter = QSplitter(QtCore.Qt.Orientation.Horizontal)
         self.horizontal_splitter.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed,
-            QtWidgets.QSizePolicy.Preferred)
+            QSizePolicy.Policy.Preferred,
+            QSizePolicy.Policy.Preferred)
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
         self.horizontal_splitter.setStretchFactor(1,5)
@@ -209,21 +211,21 @@ class MainWindow(QtWidgets.QWidget):
 
         # Grid View Scroll Area
         self.scrolling_grid_area = QtWidgets.QScrollArea(self)
-        self.scrolling_grid_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.scrolling_grid_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scrolling_grid_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scrolling_grid_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrolling_grid_area.setWidgetResizable(True)
 
         self.bottom_frame = QtWidgets.QFrame(self)
-        self.bottom_frame.setFrameShape(QFrame.StyledPanel)
+        self.bottom_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.bottom_frame.setSizePolicy(
-                QtWidgets.QSizePolicy.Preferred,
-                QtWidgets.QSizePolicy.Minimum)
+                QSizePolicy.Policy.Preferred,
+                QSizePolicy.Policy.Minimum)
         self.bottom_layout = QtWidgets.QHBoxLayout(self.bottom_frame)
         self.bottom_layout.setSpacing(10)
         self.scrolling_grid_area.setWidget(self.bottom_frame)
 
         # Creates the vertical splitter
-        self.vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        self.vertical_splitter = QSplitter(QtCore.Qt.Orientation.Vertical)
         self.vertical_splitter.addWidget(self.horizontal_splitter)
         self.vertical_splitter.addWidget(self.scrolling_grid_area)
         self.vertical_splitter.setStretchFactor(10,1)
@@ -305,7 +307,7 @@ class MainWindow(QtWidgets.QWidget):
             self.category = QtWidgets.QTreeWidgetItem(self.WD_item,[self.new_category_input.text()])
             self.category_view.addTopLevelItem(self.category)
             self.category_selector.addItem(self.new_category_input.text())
-            self.category_selector.model().sort(0, QtCore.Qt.AscendingOrder)
+            self.category_selector.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
             self.new_category_input.clear()
             QApplication.processEvents()
             self.interactive_widgets_status()
@@ -355,7 +357,7 @@ class MainWindow(QtWidgets.QWidget):
         self.image_index = 0
         self.image = QImage(self.thumb_list[self.image_index])
         self.image_display.setPixmap(QPixmap(self.image).scaled(
-            700, 700, QtCore.Qt.KeepAspectRatio))
+            700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
         self.get_current_image()
         self.highlight_selected()
 
@@ -378,7 +380,7 @@ class MainWindow(QtWidgets.QWidget):
             self.image_index = self.image_index-1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
-                700, 700, QtCore.Qt.KeepAspectRatio))
+                700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.unhighlight_all()
             self.highlight_selected()
         self.get_current_image()
@@ -391,7 +393,7 @@ class MainWindow(QtWidgets.QWidget):
             self.image_index = self.image_index+1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
-                700, 700, QtCore.Qt.KeepAspectRatio))
+                700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.unhighlight_all()
             self.highlight_selected()
         self.get_current_image()
@@ -404,21 +406,21 @@ class MainWindow(QtWidgets.QWidget):
         self.category_selector = QtWidgets.QComboBox(self)
         self.category_selector.setDisabled(True)
         self.category_selector.setSizePolicy(
-            QtWidgets.QSizePolicy.Preferred,
-            QtWidgets.QSizePolicy.Fixed)
+            QSizePolicy.Policy.Preferred,
+            QSizePolicy.Policy.Fixed)
         # Add Button
         self.add_button =  QtWidgets.QPushButton('Add', self)
         self.add_button.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed,
-                QtWidgets.QSizePolicy.Fixed)
+            QSizePolicy.Policy.Fixed,
+                QSizePolicy.Policy.Fixed)
         self.add_button.clicked.connect(self.build_file_operation_dict)
         self.add_button.setDisabled(True)
         # Creates the category selector layout
         self.cat_frame = QtWidgets.QFrame(self)
-        self.cat_frame.setFrameShape(QFrame.StyledPanel)
+        self.cat_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.cat_frame.setSizePolicy(
-                QtWidgets.QSizePolicy.Preferred,
-                QtWidgets.QSizePolicy.Fixed)
+                QSizePolicy.Policy.Preferred,
+                QSizePolicy.Policy.Fixed)
         self.cat_sel_layout = QtWidgets.QHBoxLayout(self.cat_frame)
         self.cat_sel_layout.addWidget(self.category_selector)
         self.cat_sel_layout.addWidget(self.add_button)
@@ -432,7 +434,7 @@ class MainWindow(QtWidgets.QWidget):
     def set_category_index(self):
         ''' finds the index of the selected category item '''
         self.category_name = self.category_selector.currentText()
-        self.category_index = self.category_selector.findText(self.category_name, QtCore.Qt.MatchFixedString)
+        self.category_index = self.category_selector.findText(self.category_name, QtCore.Qt.MatchFlag.MatchFixedString)
         self.category_selector.setCurrentIndex(self.category_index)
 
     def add_btn_status(self):
@@ -471,18 +473,18 @@ class MainWindow(QtWidgets.QWidget):
             self.thumb_txt = QLabel(self.file_name, self)
             self.image_index_list.append(self.image_index)
             self.thumb_txt.setSizePolicy(
-                QtWidgets.QSizePolicy.Preferred,
-                QtWidgets.QSizePolicy.MinimumExpanding)
+                QSizePolicy.Policy.Preferred,
+                QSizePolicy.Policy.MinimumExpanding)
             self.thumb_txt.setWordWrap(True)
-            self.thumb_img.setAlignment(QtCore.Qt.AlignCenter)
-            self.thumb_txt.setAlignment(QtCore.Qt.AlignCenter)
+            self.thumb_img.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            self.thumb_txt.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             self.thumb_img.setPixmap(QPixmap(self.thumb_main_img).scaled(
-                125, 125, QtCore.Qt.KeepAspectRatio))
+                125, 125, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.thumb_frame = ClickFrame(self)
             self.thumb_frame.clicked.connect(self.thumbnail_click)
             self.thumb_frame.setSizePolicy(
-                QtWidgets.QSizePolicy.Fixed,
-                QtWidgets.QSizePolicy.Fixed)
+                QSizePolicy.Policy.Fixed,
+                QSizePolicy.Policy.Fixed)
             # assigns a name to every frame created so that they are directly accessible
             self.thumb_frame.setObjectName(self.file_name)
             self.thumb_list.append(self.thumb_frame.objectName())
@@ -513,7 +515,7 @@ class MainWindow(QtWidgets.QWidget):
         self.image_index = self.thumb_dict[self.clicked.objectName()]
         self.image = QImage(self.thumb_list[self.image_index])
         self.image_display.setPixmap(QPixmap(self.image).scaled(
-                700, 700, QtCore.Qt.KeepAspectRatio))
+                700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
         print(self.clicked.objectName())
         self.unhighlight_all()
         self.show_category_if_categorized()
@@ -538,7 +540,7 @@ class MainWindow(QtWidgets.QWidget):
 
         self.get_current_image()
         if self.current_image in self.file_operation_dict.keys():
-            self.category_index = self.category_selector.findText(self.file_operation_dict[self.current_image], QtCore.Qt.MatchFixedString)
+            self.category_index = self.category_selector.findText(self.file_operation_dict[self.current_image], QtCore.Qt.MatchFlag.MatchFixedString)
             self.category_selector.setCurrentIndex(self.category_index)
         else:
             self.category_selector.setCurrentIndex(0)
@@ -554,21 +556,21 @@ class MainWindow(QtWidgets.QWidget):
         ''' Displays a popup message to make sure user wants to execute file operations '''
         self.last_chance_message_box = QMessageBox(self)
         self.last_chance_message_box.setWindowTitle("WARNING!")
-        self.last_chance_message_box.setIcon(QMessageBox.Warning)
+        self.last_chance_message_box.setIcon(QMessageBox.Icon.Warning)
         self.last_chance_message_box.setText("This operation cannot be undone! Do you wish to continue?")
-        self.last_chance_message_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
-        self.yes_button = self.last_chance_message_box.button(QMessageBox.Yes)
-        self.no_button = self.last_chance_message_box.button(QMessageBox.No)
+        self.last_chance_message_box.setStandardButtons(QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)
+        self.yes_button = self.last_chance_message_box.button(QMessageBox.StandardButton.Yes)
+        self.no_button = self.last_chance_message_box.button(QMessageBox.StandardButton.No)
         self.no_button.setText("Cancel")
 
-        self.last_chance_message_box.exec_()
+        self.last_chance_message_box.exec()
 
         if self.last_chance_message_box.clickedButton() == self.yes_button:
             self.organize_images()
 
     def warning_button_clicked(self):
         ''' If the user clicks the yes button, the file operations are executed '''
-        if self.warning_popup == QMessageBox.Yes:
+        if self.warning_popup == QMessageBox.StandardButton.Yes:
             self.organize_images()
         elif self.warning_popup == QMessageBox.Cancel:
             self.last_chance_message_box.Ignore()
@@ -591,18 +593,19 @@ class MainWindow(QtWidgets.QWidget):
                 shutil.move(self.current_image, f"{self.working_directory}\\{self.category_name}")
         
         if rename:
-            if self.current_os == "Linux" or self.current_os == "Darwin":
-                os.chdir(f"{self.working_directory}/{self.category_name}")
-            else:
-                os.chdir(f"{self.working_directory}\\{self.category_name}")
-                
-                
-            index = 0
-            for f in os.listdir():
-                f_name, f_ext = os.path.splitext(f)
-                new_name = "{}{}{}{}".format(self.category_name, "0", index, f_ext)
-                os.rename(f, new_name)
-                index += 1
+            for folder in self.category_folder_set:
+
+                if self.current_os == "Linux" or self.current_os == "Darwin":
+                    os.chdir(f"{self.working_directory}/{folder}")
+                else:
+                    os.chdir(f"{self.working_directory}\\{folder}")
+      
+                index = 0
+                for f in os.listdir():
+                    f_name, f_ext = os.path.splitext(f)
+                    new_name = "{}{}{}{}".format(folder, "0", index, f_ext)
+                    os.rename(f, new_name)
+                    index += 1
             os.chdir(self.working_directory)
 
 ################################  Rename Files  ###################################
@@ -611,14 +614,14 @@ class MainWindow(QtWidgets.QWidget):
         ''' Displays a popup message to ask if files should be renamed by category '''
         self.rename_message_box = QMessageBox(self)
         self.rename_message_box.setWindowTitle("WARNING!")
-        self.rename_message_box.setIcon(QMessageBox.Warning)
+        self.rename_message_box.setIcon(QMessageBox.Icon.Warning)
         self.rename_message_box.setText("Would you like to rename files by category?")
-        self.rename_message_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
-        self.rename_yes_button = self.rename_message_box.button(QMessageBox.Yes)
-        self.no_button = self.rename_message_box.button(QMessageBox.No)
+        self.rename_message_box.setStandardButtons(QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)
+        self.rename_yes_button = self.rename_message_box.button(QMessageBox.StandardButton.Yes)
+        self.no_button = self.rename_message_box.button(QMessageBox.StandardButton.No)
         self.no_button.setText("No")
 
-        self.rename_message_box.exec_()
+        self.rename_message_box.exec()
 
         if self.rename_message_box.clickedButton() == self.rename_yes_button:
             return True
@@ -669,6 +672,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(resource_path('image-organizer-icon.png')))
     win = MainWindow()
-    qtmodern.styles.dark(app)
+    # qtmodern.styles.dark(app)
     win.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

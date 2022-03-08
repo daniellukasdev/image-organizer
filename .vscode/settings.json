@@ -1,0 +1,8 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": ["-rn --extension-pkg-whitelist=PyQt6"]
+    // "python.linting.pylintArgs": ["-rn --extension-pkg-whitelist=PyQt6 --disable=blacklisted-name,invalid-name,missing-docstring"]
+    // "python.terminal.activateEnvironment":true,
+    // "python.defaultInterpreterPath": "/usr/local/anaconda3/envs/image-organizer-env/bin/python"
+}
