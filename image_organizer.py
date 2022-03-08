@@ -3,7 +3,8 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
     QGraphicsView, QGridLayout,QLineEdit, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
 from PyQt6.QtGui import QImage, QPixmap
-import sys, os, platform, shutil, qtmodern.styles
+import sys, os, platform, shutil
+# qtmodern.styles
 
 
 class ClickFrame(QtWidgets.QFrame):
@@ -670,6 +671,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(resource_path('image-organizer-icon.png')))
     win = MainWindow()
-    qtmodern.styles.dark(app)
+    # qtmodern.styles.dark(app)
     win.show()
     sys.exit(app.exec())
