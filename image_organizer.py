@@ -593,18 +593,19 @@ class MainWindow(QWidget):
                 shutil.move(self.current_image, f"{self.working_directory}\\{self.category_name}")
         
         if rename:
-            if self.current_os == "Linux" or self.current_os == "Darwin":
-                os.chdir(f"{self.working_directory}/{self.category_name}")
-            else:
-                os.chdir(f"{self.working_directory}\\{self.category_name}")
-                
-                
-            index = 0
-            for f in os.listdir():
-                f_name, f_ext = os.path.splitext(f)
-                new_name = "{}{}{}{}".format(self.category_name, "0", index, f_ext)
-                os.rename(f, new_name)
-                index += 1
+            for folder in self.category_folder_set:
+
+                if self.current_os == "Linux" or self.current_os == "Darwin":
+                    os.chdir(f"{self.working_directory}/{folder}")
+                else:
+                    os.chdir(f"{self.working_directory}\\{folder}")
+      
+                index = 0
+                for f in os.listdir():
+                    f_name, f_ext = os.path.splitext(f)
+                    new_name = "{}{}{}{}".format(folder, "0", index, f_ext)
+                    os.rename(f, new_name)
+                    index += 1
             os.chdir(self.working_directory)
 
 ################################  Rename Files  ###################################
