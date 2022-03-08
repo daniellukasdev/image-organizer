@@ -199,7 +199,7 @@ class MainWindow(QWidget):
         # Creates the horizontal splitter
         self.horizontal_splitter = QSplitter(QtCore.Qt.Orientation.Horizontal)
         self.horizontal_splitter.setSizePolicy(
-            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Preferred,
             QSizePolicy.Policy.Preferred)
         self.horizontal_splitter.addWidget(self.left_frame)
         self.horizontal_splitter.addWidget(self.right_frame)
