@@ -12,8 +12,8 @@ _*On Windows you may need to whitelist image-organizer.exe to your antivirus set
 # Installation & Execution
 ## Install Dependencies
 ```shell
-pip3 install pyqt5
-pip3 install qtmodern
+pip3 install pyqt6
+#pip3 install qtmodern # currently disabled
 ```
 ## Run From Terminal
 ```shell
@@ -24,11 +24,11 @@ python3 image-organizer.py
 ## Changelog
 
 ### Latest
-**2022.02.28**
-_version 0.2.1alpha_
+**2022.03.08**
+_version 0.3.2alpha_
 
-- Added option to rename files based on category
-- Option is currently presented as a pop-up
+- Upgraded to PyQt6
+- Fixed rename functionality not changing directories
 
 _See [changelog](./changelog.md) for full history_
 

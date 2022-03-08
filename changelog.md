@@ -1,5 +1,11 @@
 # Changelog:
 
+**2022.03.08**
+_version 0.3.2alpha_
+
+- Upgraded to PyQt6
+- Fixed rename functionality not changing directories
+
 **2022.02.28**
 _version 0.2.1alpha_
 
