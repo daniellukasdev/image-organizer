@@ -43,7 +43,7 @@ class MainWindow(QWidget):
         # Select Directory and input
         self.selection_input = QtWidgets.QLineEdit(self)
         self.selection_input.setPlaceholderText("Path to Folder")
-        self.selection_input.setFont(self.itallic_font)
+        # self.selection_input.setFont(self.itallic_font)
         self.selection_input.resize(350,33)
         self.selection_input.textChanged[str].connect(self.load_btn_status)
         # Select Button
@@ -54,7 +54,7 @@ class MainWindow(QWidget):
         # new category input
         self.new_category_input = QtWidgets.QLineEdit(self)
         self.new_category_input.setPlaceholderText("Create New Category...")
-        self.new_category_input.setFont(self.itallic_font)
+        # self.new_category_input.setFont(self.itallic_font)
         self.new_category_input.resize(350,33)
         self.new_category_input.textChanged[str].connect(self.create_btn_status)
         self.new_category_input.setDisabled(True)
@@ -300,8 +300,24 @@ class MainWindow(QWidget):
             self.WD_item = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
             self.category_view.addTopLevelItem(self.WD_item)
 
-    def create_new_category(self):
+        self.wd_sub_dirs = set(name for name in os.listdir(self.working_directory) if os.path.isdir(name))
+        print(self.wd_sub_dirs)
+        
+        # checks for sub-directories within working directory and creates new categories using sub-dir names
+        for dir in self.wd_sub_dirs:
+            self.create_new_category(dir)
+
+    def create_new_category(self, dir):
         ''' Adds a new category to the category_view and category_selector widgets '''
+
+        if dir:
+            print(dir)
+            self.category = QtWidgets.QTreeWidgetItem(self.WD_item,[dir])
+            self.category_view.addTopLevelItem(self.category)
+            self.category_selector.addItem(dir)
+            self.category_selector.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
+            QApplication.processEvents()
+            self.interactive_widgets_status()
 
         if self.new_category_input.text() != "":
             self.category = QtWidgets.QTreeWidgetItem(self.WD_item,[self.new_category_input.text()])
@@ -608,7 +624,10 @@ class MainWindow(QWidget):
                     index += 1
             os.chdir(self.working_directory)
 
+###################################################################################
 ################################  Rename Files  ###################################
+###################################################################################
+
 
     def rename_popup(self):
         ''' Displays a popup message to ask if files should be renamed by category '''
@@ -629,9 +648,9 @@ class MainWindow(QWidget):
 
 
 
-#######################################################################
-#############  Functions that remove and delete things   ##############
-#######################################################################
+###################################################################################
+###################  Functions that remove and delete things   ####################
+###################################################################################
 
     def reset_image_list(self):
         ''' Clears the list of image file names '''
