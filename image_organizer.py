@@ -1,10 +1,11 @@
-from PyQt6 import QtCore, QtGui, QtWidgets
-# from PyQt6.QtCore import Qt
+from PyQt6 import QtCore, QtGui, QtWidgets 
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
     QGraphicsView, QGridLayout,QLineEdit, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
 from PyQt6.QtGui import QImage, QPixmap
 import sys, os, platform, shutil
 # qtmodern.styles
+from utilities import intPrint
 
 
 class ClickFrame(QtWidgets.QFrame):
@@ -46,7 +47,7 @@ class MainWindow(QWidget):
         # self.selection_input.setFont(self.itallic_font)
         self.selection_input.resize(350,33)
         self.selection_input.textChanged[str].connect(self.load_btn_status)
-        # Select Button
+        # Import Button
         self.import_button =  QtWidgets.QPushButton('Import', self)
         self.import_button.clicked.connect(self.create_working_directory)
         self.import_button.setDisabled(True)
@@ -72,6 +73,7 @@ class MainWindow(QWidget):
         self.category_view.setSizePolicy(
             QSizePolicy.Policy.Preferred,
             QSizePolicy.Policy.Preferred)
+        self.category_view.itemClicked.connect(self.on_category_clicked)
 
         # Organize button and label
         self.organization_label = QtWidgets.QLabel('This operation cannot be undone!')
@@ -248,6 +250,9 @@ class MainWindow(QWidget):
 
     def load_btn_status(self):
         ''' Disables and enables the load button when the conditions are met '''
+
+        intPrint("function", 1, "Executed function: load_btn_status()")
+
         if self.selection_input.text() != "":
             self.import_button.setDisabled(False)
         elif self.selection_input.text() == "":
@@ -255,6 +260,9 @@ class MainWindow(QWidget):
 
     def folder_select(self):
         ''' Assignes the selected path to the input box '''
+
+        intPrint("function", 1, "Executed function: folder_select()")
+
         self.chosen_directory = QFileDialog.getExistingDirectory(self)
         if self.chosen_directory != "":
             self.selection_input.clear()
@@ -262,7 +270,11 @@ class MainWindow(QWidget):
         self.input_text = self.selection_input.text()
 
     def loading_msg_check(self):
-        ''' Clears all images and executes the build dictionary function when the status bar reads "Importing Images... '''
+        ''' Clears all images and executes the build dictionary function when the 
+        status bar reads "Importing Images... '''
+
+        intPrint("function", 1, "Executed function: loading_msg_check()")
+
         if "Importing Images . . ." in self.loading_msg_label.text():
             QApplication.processEvents()
             if self.bottom_layout.count() != 0:
@@ -272,6 +284,9 @@ class MainWindow(QWidget):
 
     def create_working_directory(self):
         ''' Assigns the input path to the current working directory '''
+
+        intPrint("function", 1, "Executed function: create_working_directory()")
+
         if os.path.exists(self.selection_input.text()) and self.selection_input.text() != "":
             self.input_text = self.selection_input.text()
             self.working_directory = self.input_text
@@ -285,49 +300,76 @@ class MainWindow(QWidget):
 
     def add_wd_to_tree(self):
         ''' Adds the working directory as the root item in the category view '''
+
+        intPrint("function", 1, "Executed function: add_wd_to_tree()")
+        
         self.current_os = platform.system()
 
         if "/" in self.working_directory:
             self.clear_categories_tree()
             self.image_folder = self.working_directory.split("/")[-1]
-            self.WD_item = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
-            self.WD_item.setExpanded(True)
-            self.category_view.addTopLevelItem(self.WD_item)
+            self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
+            self.working_dir.setExpanded(True)
+            self.category_view.addTopLevelItem(self.working_dir)
             self.new_category_input.setDisabled(False)
         elif "\\" in self.working_directory:
             self.clear_categories_tree()
             self.image_folder = self.working_directory.split("\\")[-1]
-            self.WD_item = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
-            self.category_view.addTopLevelItem(self.WD_item)
+            self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
+            self.category_view.addTopLevelItem(self.working_dir)
 
-        self.wd_sub_dirs = set(name for name in os.listdir(self.working_directory) if os.path.isdir(name))
-        print(self.wd_sub_dirs)
+        self.sub_dirs = set(name for name in os.listdir(self.working_directory) if os.path.isdir(name))
+        intPrint("variable", 1, self.sub_dirs)
         
         # checks for sub-directories within working directory and creates new categories using sub-dir names
-        for dir in self.wd_sub_dirs:
+        for dir in self.sub_dirs:
             self.create_new_category(dir)
 
     def create_new_category(self, dir):
         ''' Adds a new category to the category_view and category_selector widgets '''
 
+        intPrint("function", 1, "Executed function: create_new_category()")
+        intPrint("test", 2, F"Type of 'self.working_dir': {type(self.working_dir)}")
+
         if dir:
-            print(dir)
-            self.category = QtWidgets.QTreeWidgetItem(self.WD_item,[dir])
-            self.category_view.addTopLevelItem(self.category)
+            intPrint("variable", 1, dir)
+            self.new_category = QtWidgets.QTreeWidgetItem(self.working_dir,[dir])
+            intPrint("info", 1, 'self.new_category: ' + self.new_category.data(0, 0))
+            self.category_view.addTopLevelItem(self.new_category)
             self.category_selector.addItem(dir)
             self.category_selector.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
             QApplication.processEvents()
             self.interactive_widgets_status()
 
         if self.new_category_input.text() != "":
-            self.category = QtWidgets.QTreeWidgetItem(self.WD_item,[self.new_category_input.text()])
+            self.new_category = QtWidgets.QTreeWidgetItem(self.working_dir,[self.new_category_input.text()])
             self.category_view.addTopLevelItem(self.category)
             self.category_selector.addItem(self.new_category_input.text())
             self.category_selector.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
             self.new_category_input.clear()
             QApplication.processEvents()
             self.interactive_widgets_status()
+            intPrint("variable", 1, "New category created: " + self.new_category)
 
+    def populate_category(self, category, item):
+        '''  Adds files if in sub directories under category in tree, 
+        and adds images w/file names and paths when added with Add button  '''
+
+        intPrint("function", 1, "Executed function: populate_category()")
+        intPrint("variable", 1, "category: " + category)
+        intPrint("variable", 1, "item: " + item)
+        category = self.category_view.findItems(category, Qt.MatchFlag.MatchRecursive, column=0)
+        intPrint("test", 2, category[0].text(0))
+        intPrint("test", 2, F"Type of 'category': {type(category[0])}")
+        self.category_item = QtWidgets.QTreeWidgetItem(category[0], [item])
+        intPrint("test", 2, self.category_item.text(0))
+
+    def on_category_clicked(self):
+        '''  Assigns category to variable when clicked  '''
+
+        self.selected_category = self.category_view.currentItem().text(0)
+        intPrint("event", 1, "Selected: " + self.selected_category)
+    
     def create_btn_status(self):
         ''' Disables and enables the create button when the conditions are met '''
 
@@ -340,6 +382,8 @@ class MainWindow(QWidget):
         ''' Creates all the dictionaries, lists, and sets to be used,
         then populates lists with names of supported image files in the working directory '''
 
+        intPrint("function", 1, "Executed function: build_dict()")
+        
         # creates a list that will get populated with filenames
         self.image_files = []
         self.sorted_image_files = []
@@ -367,6 +411,8 @@ class MainWindow(QWidget):
 
     def display_images(self):
         ''' Displays the first image in the directory '''
+
+        intPrint("function", 1, "Executed function: display_images()")
 
         self.import_button.setDisabled(True)
         self.interactive_widgets_status()
@@ -418,12 +464,15 @@ class MainWindow(QWidget):
     def build_selector(self):
         ''' Creates the selection menu for the categories '''
 
+        intPrint("function", 1, "Executed function: build_selector()")
+
         # Category Selector
         self.category_selector = QtWidgets.QComboBox(self)
         self.category_selector.setDisabled(True)
         self.category_selector.setSizePolicy(
             QSizePolicy.Policy.Preferred,
             QSizePolicy.Policy.Fixed)
+
         # Add Button
         self.add_button =  QtWidgets.QPushButton('Add', self)
         self.add_button.setSizePolicy(
@@ -431,6 +480,7 @@ class MainWindow(QWidget):
                 QSizePolicy.Policy.Fixed)
         self.add_button.clicked.connect(self.build_file_operation_dict)
         self.add_button.setDisabled(True)
+
         # Creates the category selector layout
         self.cat_frame = QtWidgets.QFrame(self)
         self.cat_frame.setFrameShape(QFrame.Shape.StyledPanel)
@@ -440,6 +490,7 @@ class MainWindow(QWidget):
         self.cat_sel_layout = QtWidgets.QHBoxLayout(self.cat_frame)
         self.cat_sel_layout.addWidget(self.category_selector)
         self.cat_sel_layout.addWidget(self.add_button)
+
         # Adds the selector to right layout
         self.right_layout.addWidget(self.cat_frame)
 
@@ -483,6 +534,8 @@ class MainWindow(QWidget):
     def populate_grid_view(self):
         ''' creates the thumbnails of every supported image in the working directory '''
 
+        intPrint("function", 1, "Executed function: populate_grid_view()")
+
         for self.image_index, self.file_name in enumerate(self.sorted_image_files):
             self.thumb_main_img = QImage(self.sorted_image_files[self.image_index])
             self.thumb_img = QLabel(self)
@@ -510,6 +563,7 @@ class MainWindow(QWidget):
             self.bottom_layout.addWidget(self.thumb_frame)
             self.thumb_dict = dict(zip(self.thumb_list, self.image_index_list))
             QApplication.processEvents()
+
         self.loading_msg_label.setText("Import complete")
 
     def unhighlight_all(self):
@@ -522,7 +576,7 @@ class MainWindow(QWidget):
         ''' sets the style of the selected thumbnail '''
         self.thumb_selected = self.findChild(ClickFrame, self.thumb_list[self.image_index])
         self.thumb_selected.setStyleSheet("border: 1px solid rgb(42, 130, 218); background-color: rgb(42, 130, 218); color: white;")
-        print(self.thumb_list[self.image_index])
+        intPrint("info", 1, 'Selection Highlighted: ' + self.thumb_list[self.image_index])
 
     def thumbnail_click(self):
         ''' Get thumbnail that was clicked '''
@@ -532,14 +586,17 @@ class MainWindow(QWidget):
         self.image = QImage(self.thumb_list[self.image_index])
         self.image_display.setPixmap(QPixmap(self.image).scaled(
                 700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
-        print(self.clicked.objectName())
+        intPrint("event", 1, "Clicked: " + self.clicked.objectName())
         self.unhighlight_all()
         self.show_category_if_categorized()
+
         #sets the style of the selected thumbnail
         self.clicked.setStyleSheet("border: 1px solid rgb(42, 130, 218); background-color: rgb(42, 130, 218); color: white;")
 
     def build_file_operation_dict(self):
         ''' Populates the dictionary that all file operations reference '''
+
+        intPrint("function", 1, "Executed function: build_file_operation_dict()")
 
         self.get_current_image()
         if self.file_operation_dict == {}:
@@ -547,12 +604,13 @@ class MainWindow(QWidget):
         else:
             self.file_operation_dict[self.current_image] = self.category_name
         self.loading_msg_label.setText(f"{self.current_image} added to {self.category_name}")
-        print(self.file_operation_dict)
+        intPrint("variable", 1, f"file_operation_dict: {self.file_operation_dict}")
+        self.populate_category(self.category_name , self.current_image)
         self.organization_btn_status()
 
     def show_category_if_categorized(self):
-        ''' If an image has been added to a category,
-        that category becomes the current item in the selector when the image is selected '''
+        ''' If an image has been added to a category, that category 
+        becomes the current item in the selector when the image is selected '''
 
         self.get_current_image()
         if self.current_image in self.file_operation_dict.keys():
@@ -570,6 +628,9 @@ class MainWindow(QWidget):
 
     def organize_warning_popup(self):
         ''' Displays a popup message to make sure user wants to execute file operations '''
+
+        intPrint("function", 1, "Executed function: organize_warning_popup()")
+
         self.last_chance_message_box = QMessageBox(self)
         self.last_chance_message_box.setWindowTitle("WARNING!")
         self.last_chance_message_box.setIcon(QMessageBox.Icon.Warning)
@@ -594,6 +655,9 @@ class MainWindow(QWidget):
     def organize_images(self):
         ''' Creates a folder in the working directory for every category,
         and the moves all images to the folder of the category they're added to. '''
+
+        intPrint("function", 1, "Executed function: organize_images()")
+
         rename = self.rename_popup()
         
         for self.current_image, self.category_name in self.file_operation_dict.items():
@@ -631,6 +695,9 @@ class MainWindow(QWidget):
 
     def rename_popup(self):
         ''' Displays a popup message to ask if files should be renamed by category '''
+
+        intPrint("function", 1, "Executed function: rename_popup()")
+
         self.rename_message_box = QMessageBox(self)
         self.rename_message_box.setWindowTitle("WARNING!")
         self.rename_message_box.setIcon(QMessageBox.Icon.Warning)
@@ -654,26 +721,39 @@ class MainWindow(QWidget):
 
     def reset_image_list(self):
         ''' Clears the list of image file names '''
+
+        intPrint("function", 1, "Executed function: reset_image_list()")
+
         if self.image_files != []:
             self.selection_input.setText("")
             self.image_files.clear()
 
     def clear_thumbnails(self):
         ''' Removes all thumbnails that have previously been created. '''
+
+        intPrint("function", 1, "Executed function: clear_thumbnails()")
+
         for i in reversed(range(self.bottom_layout.count())):
             self.bottom_layout.itemAt(i).widget().deleteLater()
             QApplication.processEvents()
 
     def clear_img_display(self):
         ''' Removes the image in the main display '''
+
+        intPrint("function", 1, "Executed function: clear_img_display()")        
         self.image_display.clear()
 
     def clear_categories_tree(self):
         ''' Removes all items from the category view widget '''
+
+        intPrint("function", 1, "Executed function: clear_categories_tree()")
         self.category_view.clear()
 
     def clear_cat_selector(self):
         ''' Removes all items from the selection menu '''
+
+        intPrint("function", 1, "Executed function: clear_cat_selector()")
+
         self.category_selector.clear()
         QApplication.processEvents()
         self.category_selector.addItem("--Select Category--")
