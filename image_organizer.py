@@ -329,7 +329,6 @@ class MainWindow(QWidget):
         ''' Adds a new category to the category_view and category_selector widgets '''
 
         intPrint("function", 1, "Executed function: create_new_category()")
-        intPrint("test", 2, F"Type of 'self.working_dir': {type(self.working_dir)}")
 
         if dir:
             intPrint("variable", 1, dir)
@@ -359,7 +358,7 @@ class MainWindow(QWidget):
         intPrint("variable", 1, "category: " + category)
         intPrint("variable", 1, "item: " + item)
         category = self.category_view.findItems(category, Qt.MatchFlag.MatchRecursive, column=0)
-        intPrint("test", 2, category[0].text(0))
+        intPrint("info", 2, category[0].text(0))
         intPrint("test", 2, F"Type of 'category': {type(category[0])}")
         self.category_item = QtWidgets.QTreeWidgetItem(category[0], [item])
         intPrint("test", 2, self.category_item.text(0))
