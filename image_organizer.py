@@ -350,6 +350,8 @@ class MainWindow(QWidget):
             self.interactive_widgets_status()
             intPrint("variable", 1, "New category created: " + self.new_category)
 
+        self.category_view.expandAll()
+
     def populate_category(self, category, item):
         '''  Adds files if in sub directories under category in tree, 
         and adds images w/file names and paths when added with Add button  '''
@@ -366,8 +368,12 @@ class MainWindow(QWidget):
     def on_category_clicked(self):
         '''  Assigns category to variable when clicked  '''
 
+        # gets the treeview item that was clicked
         self.selected_category = self.category_view.currentItem().text(0)
         intPrint("event", 1, "Selected: " + self.selected_category)
+
+        # passes the clicked treeview item to display_images()
+        self.display_images(self.selected_category)
     
     def create_btn_status(self):
         ''' Disables and enables the create button when the conditions are met '''
@@ -408,18 +414,30 @@ class MainWindow(QWidget):
 
         self.cat_sel_func()
 
-    def display_images(self):
+    def display_images(self, image = ""):
         ''' Displays the first image in the directory '''
 
         intPrint("function", 1, "Executed function: display_images()")
+        # intPrint("variable", 1, f"self.sorted_image_files: {self.sorted_image_files}")
 
-        self.import_button.setDisabled(True)
+        if image:
+            for file in enumerate(self.sorted_image_files):
+                index = file[0]
+                image_name = file[1]
+                if image_name == image:
+                    intPrint("info", 1, f"Index: {index}, image_name: {image_name}")
+                    self.image_index = index
+        else:
+            self.image_index = 0
+            self.import_button.setDisabled(True)
+        
         self.interactive_widgets_status()
-        self.image_index = 0
         self.image = QImage(self.thumb_list[self.image_index])
         self.image_display.setPixmap(QPixmap(self.image).scaled(
             700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
+        
         self.get_current_image()
+        self.unhighlight_all()
         self.highlight_selected()
 
 
@@ -451,7 +469,7 @@ class MainWindow(QWidget):
         ''' Allows for forward navigation '''
 
         if self.image_index < len(self.sorted_image_files)-1:
-            self.image_index = self.image_index+1
+            self.image_index += 1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
                 700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
