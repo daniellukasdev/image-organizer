@@ -25,6 +25,9 @@ class MainWindow(QWidget):
         self.height = 960
         self.initUI()
 
+#######################################################################
+############################  Define UI   #############################
+#######################################################################
     def initUI(self):
         self.setWindowTitle(self.title)
         self.resize(self.width, self.height)
@@ -74,6 +77,7 @@ class MainWindow(QWidget):
             QSizePolicy.Policy.Preferred,
             QSizePolicy.Policy.Preferred)
         self.category_view.itemClicked.connect(self.on_category_clicked)
+        self.selected_item = None
 
         # Organize button and label
         self.organization_label = QtWidgets.QLabel('This operation cannot be undone!')
@@ -248,6 +252,10 @@ class MainWindow(QWidget):
 
         self.build_selector()
 
+#######################################################################
+############################  Functions  ##############################
+#######################################################################
+
     def load_btn_status(self):
         ''' Disables and enables the load button when the conditions are met '''
 
@@ -308,15 +316,15 @@ class MainWindow(QWidget):
         if "/" in self.working_directory:
             self.clear_categories_tree()
             self.image_folder = self.working_directory.split("/")[-1]
-            self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
-            self.working_dir.setExpanded(True)
-            self.category_view.addTopLevelItem(self.working_dir)
+            # self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
+            # self.working_dir.setExpanded(True)
+            # self.category_view.addTopLevelItem(self.working_dir)
             self.new_category_input.setDisabled(False)
         elif "\\" in self.working_directory:
             self.clear_categories_tree()
             self.image_folder = self.working_directory.split("\\")[-1]
-            self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
-            self.category_view.addTopLevelItem(self.working_dir)
+            # self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
+            # self.category_view.addTopLevelItem(self.working_dir)
 
         self.sub_dirs = set(name for name in os.listdir(self.working_directory) if os.path.isdir(name))
         intPrint("variable", 1, self.sub_dirs)
@@ -332,7 +340,7 @@ class MainWindow(QWidget):
 
         if dir:
             intPrint("variable", 1, dir)
-            self.new_category = QtWidgets.QTreeWidgetItem(self.working_dir,[dir])
+            self.new_category = QtWidgets.QTreeWidgetItem(self.category_view,[dir])
             intPrint("info", 1, 'self.new_category: ' + self.new_category.data(0, 0))
             self.category_view.addTopLevelItem(self.new_category)
             self.category_selector.addItem(dir)
@@ -341,14 +349,21 @@ class MainWindow(QWidget):
             self.interactive_widgets_status()
 
         if self.new_category_input.text() != "":
-            self.new_category = QtWidgets.QTreeWidgetItem(self.working_dir,[self.new_category_input.text()])
-            self.category_view.addTopLevelItem(self.category)
+
+            intPrint("test", 2, F"self.category_view.indexOfTopLevelItem(self.selected_item)': {self.category_view.indexOfTopLevelItem(self.selected_item)}")
+            if self.selected_item:
+                if self.category_view.indexOfTopLevelItem(self.selected_item) == 0 or self.selected_item.childCount() != 0:
+                    intPrint("test", 2, F"Type of 'self.selected_item': {type(self.selected_item)}")
+                    self.new_category = QtWidgets.QTreeWidgetItem(self.selected_item,[self.new_category_input.text()])
+            else:
+                self.new_category = QtWidgets.QTreeWidgetItem(self.category_view,[self.new_category_input.text()])
+            self.category_view.addTopLevelItem(self.new_category)
             self.category_selector.addItem(self.new_category_input.text())
             self.category_selector.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
             self.new_category_input.clear()
             QApplication.processEvents()
             self.interactive_widgets_status()
-            intPrint("variable", 1, "New category created: " + self.new_category)
+            # intPrint("variable", 1, f"New category created: {self.new_category}")
 
         self.category_view.expandAll()
 
@@ -369,11 +384,12 @@ class MainWindow(QWidget):
         '''  Assigns category to variable when clicked  '''
 
         # gets the treeview item that was clicked
-        self.selected_category = self.category_view.currentItem().text(0)
-        intPrint("event", 1, "Selected: " + self.selected_category)
+        self.selected_item = self.category_view.currentItem()#.text(0)
+        intPrint("event", 1, "Selected: " + self.selected_item.text(0))
+        # intPrint("test", 2, F"Type of 'self.selected_item': {type(self.selected_item)}")
 
         # passes the clicked treeview item to display_images()
-        self.display_images(self.selected_category)
+        self.display_images(self.selected_item)
     
     def create_btn_status(self):
         ''' Disables and enables the create button when the conditions are met '''
