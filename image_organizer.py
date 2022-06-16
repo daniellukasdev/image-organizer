@@ -316,15 +316,15 @@ class MainWindow(QWidget):
         if "/" in self.working_directory:
             self.clear_categories_tree()
             self.image_folder = self.working_directory.split("/")[-1]
-            # self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
-            # self.working_dir.setExpanded(True)
-            # self.category_view.addTopLevelItem(self.working_dir)
+            self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
+            self.working_dir.setExpanded(True)
+            self.category_view.addTopLevelItem(self.working_dir)
             self.new_category_input.setDisabled(False)
         elif "\\" in self.working_directory:
             self.clear_categories_tree()
             self.image_folder = self.working_directory.split("\\")[-1]
-            # self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
-            # self.category_view.addTopLevelItem(self.working_dir)
+            self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
+            self.category_view.addTopLevelItem(self.working_dir)
 
         self.sub_dirs = set(name for name in os.listdir(self.working_directory) if os.path.isdir(name))
         intPrint("variable", 1, self.sub_dirs)
@@ -340,7 +340,7 @@ class MainWindow(QWidget):
 
         if dir:
             intPrint("variable", 1, dir)
-            self.new_category = QtWidgets.QTreeWidgetItem(self.category_view,[dir])
+            self.new_category = QtWidgets.QTreeWidgetItem(self.working_dir,[dir])
             intPrint("info", 1, 'self.new_category: ' + self.new_category.data(0, 0))
             self.category_view.addTopLevelItem(self.new_category)
             self.category_selector.addItem(dir)
@@ -350,16 +350,20 @@ class MainWindow(QWidget):
 
         if self.new_category_input.text() != "":
 
-            intPrint("test", 2, F"self.category_view.indexOfTopLevelItem(self.selected_item)': {self.category_view.indexOfTopLevelItem(self.selected_item)}")
             if self.selected_item:
-                if self.category_view.indexOfTopLevelItem(self.selected_item) == 0 or self.selected_item.childCount() != 0:
-                    intPrint("test", 2, F"Type of 'self.selected_item': {type(self.selected_item)}")
+                # intPrint("test", 2, F"self.category_view.indexOfTopLevelItem(self.selected_item)': {self.category_view.indexOfTopLevelItem(self.selected_item)}")
+                if self.selected_item.text(0)[len(self.selected_item.text(0)) - 4] != ".":
+                    intPrint("test", 2, F"'self.selected_item' text: {self.selected_item.text(0)[len(self.selected_item.text(0)) - 4]}")
                     self.new_category = QtWidgets.QTreeWidgetItem(self.selected_item,[self.new_category_input.text()])
+                    self.category_selector.addItem(self.new_category_input.text())
+                else:
+                    return False
             else:
-                self.new_category = QtWidgets.QTreeWidgetItem(self.category_view,[self.new_category_input.text()])
-            self.category_view.addTopLevelItem(self.new_category)
-            self.category_selector.addItem(self.new_category_input.text())
+                self.new_category = QtWidgets.QTreeWidgetItem(self.working_dir,[self.new_category_input.text()])
+                self.category_selector.addItem(self.new_category_input.text())
+
             self.category_selector.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
+            self.category_view.addTopLevelItem(self.new_category)
             self.new_category_input.clear()
             QApplication.processEvents()
             self.interactive_widgets_status()
@@ -389,7 +393,7 @@ class MainWindow(QWidget):
         # intPrint("test", 2, F"Type of 'self.selected_item': {type(self.selected_item)}")
 
         # passes the clicked treeview item to display_images()
-        self.display_images(self.selected_item)
+        self.display_images(self.selected_item.text(0))
     
     def create_btn_status(self):
         ''' Disables and enables the create button when the conditions are met '''
