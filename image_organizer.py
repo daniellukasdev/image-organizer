@@ -1,8 +1,8 @@
 from PyQt6 import QtCore, QtGui, QtWidgets 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
-    QGraphicsView, QGridLayout,QLineEdit, QLabel, QMessageBox, QSizePolicy, QSplitter, QWidget
-from PyQt6.QtGui import QImage, QPixmap
+    QGraphicsView, QGridLayout, QLineEdit, QLabel, QMessageBox, QPushButton, QSizePolicy, QSplitter, QWidget
+from PyQt6.QtGui import QFont, QImage, QPixmap
 import sys, os, platform, shutil
 # qtmodern.styles
 from utilities import intPrint
@@ -33,14 +33,15 @@ class MainWindow(QWidget):
         self.resize(self.width, self.height)
 
         # Create Font Style Options
-        self.itallic_font = QtGui.QFont()
+        self.itallic_font = QFont()
         self.itallic_font.setItalic(True)
-        self.big_font = QtGui.QFont()
-        self.big_font.setPointSize(16)
+        self.big_font = QFont()
+        self.big_font.setPointSize(20)
         self.big_font.setBold(True)
+        self.big_font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 1.0)
 
         # Browse Directory Button
-        self.browse_button = QtWidgets.QPushButton('Browse', self)
+        self.browse_button = QPushButton('Browse', self)
         self.browse_button.setMaximumWidth(75)
         self.browse_button.clicked.connect(self.folder_select)
 
@@ -51,9 +52,13 @@ class MainWindow(QWidget):
         self.selection_input.resize(350,33)
         self.selection_input.textChanged[str].connect(self.load_btn_status)
         # Import Button
-        self.import_button =  QtWidgets.QPushButton('Import', self)
+        self.import_button =  QPushButton('Import', self)
         self.import_button.clicked.connect(self.create_working_directory)
         self.import_button.setDisabled(True)
+
+        # Category Area Label
+        self.categories_label = QLabel("Categories")
+        self.categories_label.setFont(self.big_font)
 
         # new category input
         self.new_category_input = QtWidgets.QLineEdit(self)
@@ -63,13 +68,13 @@ class MainWindow(QWidget):
         self.new_category_input.textChanged[str].connect(self.create_btn_status)
         self.new_category_input.setDisabled(True)
         # Create Button
-        self.create_button =  QtWidgets.QPushButton('Create', self)
+        self.create_button =  QPushButton('Create', self)
         self.create_button.setDisabled(True)
         self.create_button.clicked.connect(self.create_new_category)
 
         # Category Tree View
         self.category_view = QtWidgets.QTreeWidget(self)
-        self.category_view.setHeaderLabel('Categories')
+        self.category_view.setHeaderLabel("Working Directory")
         self.category_view.setSortingEnabled(True)
         self.category_view.sortByColumn(0,QtCore.Qt.SortOrder.AscendingOrder)
         self.category_view.setAlternatingRowColors(True)
@@ -80,14 +85,14 @@ class MainWindow(QWidget):
         self.selected_item = None
 
         # Organize button and label
-        self.organization_label = QtWidgets.QLabel('This operation cannot be undone!')
+        self.organization_label = QLabel("This operation cannot be undone!")
         self.organization_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.organization_label.setFont(self.itallic_font)
         self.organization_label.setWordWrap(True)
         self.organization_label.setSizePolicy(
             QSizePolicy.Policy.MinimumExpanding,
             QSizePolicy.Policy.MinimumExpanding)
-        self.organize_button = QtWidgets.QPushButton('Organize', self)
+        self.organize_button = QPushButton('Organize', self)
         self.organize_button.setFont(self.big_font)
         self.organize_button.setFixedWidth(125)
         self.organize_button.setSizePolicy(
@@ -110,7 +115,7 @@ class MainWindow(QWidget):
         self.scrolling_display_area.setWidget(self.image_display)
 
         # Image Navigation Buttons
-        self.previous_button = QtWidgets.QPushButton("<", self)
+        self.previous_button = QPushButton("<", self)
         self.previous_button.setFont(self.big_font)
         self.previous_button.setMaximumWidth(25)
         self.previous_button.setSizePolicy(
@@ -119,7 +124,7 @@ class MainWindow(QWidget):
         self.previous_button.clicked.connect(self.previous_image)
         self.previous_button.setDisabled(True)
 
-        self.next_button = QtWidgets.QPushButton(">", self)
+        self.next_button = QPushButton(">", self)
         self.next_button.setFont(self.big_font)
         self.next_button.setMaximumWidth(25)
         self.next_button.setSizePolicy(
@@ -195,6 +200,7 @@ class MainWindow(QWidget):
         self.left_layout = QtWidgets.QVBoxLayout(self.left_frame)
 
         # creates category_new layout
+        self.left_layout.addWidget(self.categories_label, 0, QtCore.Qt.AlignmentFlag.AlignCenter)
         self.category_create_new_layout = QtWidgets.QHBoxLayout()
         self.category_create_new_layout.addWidget(self.new_category_input)
         self.category_create_new_layout.addWidget(self.create_button)
@@ -315,6 +321,10 @@ class MainWindow(QWidget):
 
         if "/" in self.working_directory:
             self.clear_categories_tree()
+            intPrint("variable", 1, self.working_directory.split("/"))
+            self.wrk_dir_path = self.working_directory.split("/")[-3] + "/" + \
+                self.working_directory.split("/")[-2] + "/" + self.working_directory.split("/")[-1]
+            self.category_view.setHeaderLabel(self.wrk_dir_path)
             self.image_folder = self.working_directory.split("/")[-1]
             self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
             self.working_dir.setExpanded(True)
@@ -322,6 +332,7 @@ class MainWindow(QWidget):
             self.new_category_input.setDisabled(False)
         elif "\\" in self.working_directory:
             self.clear_categories_tree()
+            self.category_view.setHeaderLabel(self.working_directory.split("\\")[-3])
             self.image_folder = self.working_directory.split("\\")[-1]
             self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
             self.category_view.addTopLevelItem(self.working_dir)
@@ -511,7 +522,7 @@ class MainWindow(QWidget):
             QSizePolicy.Policy.Fixed)
 
         # Add Button
-        self.add_button =  QtWidgets.QPushButton('Add', self)
+        self.add_button =  QPushButton('Add', self)
         self.add_button.setSizePolicy(
             QSizePolicy.Policy.Fixed,
                 QSizePolicy.Policy.Fixed)
