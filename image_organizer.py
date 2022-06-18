@@ -1,7 +1,8 @@
 from PyQt6 import QtCore, QtGui, QtWidgets 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
-    QGraphicsView, QGridLayout, QLineEdit, QLabel, QMessageBox, QPushButton, QSizePolicy, QSplitter, QWidget
+    QGraphicsView, QGridLayout, QLineEdit, QLabel, QMessageBox, QPushButton, QScrollArea, QSizePolicy, \
+        QSplitter, QTreeWidget, QTreeWidgetItem, QWidget
 from PyQt6.QtGui import QFont, QImage, QPixmap
 import sys, os, platform, shutil
 # qtmodern.styles
@@ -33,6 +34,7 @@ class MainWindow(QWidget):
         self.resize(self.width, self.height)
 
         # Create Font Style Options
+        self.regular_font = QFont()
         self.itallic_font = QFont()
         self.itallic_font.setItalic(True)
         self.big_font = QFont()
@@ -46,13 +48,14 @@ class MainWindow(QWidget):
         self.browse_button.clicked.connect(self.folder_select)
 
         # Select Directory and input
-        self.selection_input = QtWidgets.QLineEdit(self)
+        self.selection_input = QLineEdit(self)
         self.selection_input.setPlaceholderText("Path to Folder")
-        # self.selection_input.setFont(self.itallic_font)
+        self.selection_input.setFont(self.itallic_font)
         self.selection_input.resize(350,33)
         self.selection_input.textChanged[str].connect(self.load_btn_status)
+        
         # Import Button
-        self.import_button =  QPushButton('Import', self)
+        self.import_button = QPushButton('Import', self)
         self.import_button.clicked.connect(self.create_working_directory)
         self.import_button.setDisabled(True)
 
@@ -61,19 +64,21 @@ class MainWindow(QWidget):
         self.categories_label.setFont(self.big_font)
 
         # new category input
-        self.new_category_input = QtWidgets.QLineEdit(self)
+        self.new_category_input = QLineEdit(self)
         self.new_category_input.setPlaceholderText("Create New Category...")
-        # self.new_category_input.setFont(self.itallic_font)
+        self.new_category_input.setFont(self.itallic_font)
         self.new_category_input.resize(350,33)
         self.new_category_input.textChanged[str].connect(self.create_btn_status)
         self.new_category_input.setDisabled(True)
         # Create Button
-        self.create_button =  QPushButton('Create', self)
+        self.create_button = QPushButton('Create', self)
         self.create_button.setDisabled(True)
         self.create_button.clicked.connect(self.create_new_category)
 
         # Category Tree View
-        self.category_view = QtWidgets.QTreeWidget(self)
+        self.category_view = QTreeWidget(self)
+        self.category_view.installEventFilter(self)
+        self.category_view.viewport().installEventFilter(self)
         self.category_view.setHeaderLabel("Working Directory")
         self.category_view.setSortingEnabled(True)
         self.category_view.sortByColumn(0,QtCore.Qt.SortOrder.AscendingOrder)
@@ -103,7 +108,7 @@ class MainWindow(QWidget):
 
 
         # Image Viewer Label and Scroll Area
-        self.scrolling_display_area = QtWidgets.QScrollArea(self)
+        self.scrolling_display_area = QScrollArea(self)
         self.scrolling_display_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrolling_display_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrolling_display_area.setWidgetResizable(True)
@@ -222,7 +227,7 @@ class MainWindow(QWidget):
         self.horizontal_splitter.setCollapsible(1, False)
 
         # Grid View Scroll Area
-        self.scrolling_grid_area = QtWidgets.QScrollArea(self)
+        self.scrolling_grid_area = QScrollArea(self)
         self.scrolling_grid_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrolling_grid_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scrolling_grid_area.setWidgetResizable(True)
@@ -272,6 +277,8 @@ class MainWindow(QWidget):
         elif self.selection_input.text() == "":
             self.import_button.setDisabled(True)
 
+        self.change_font(self.selection_input)
+
     def folder_select(self):
         ''' Assignes the selected path to the input box '''
 
@@ -295,6 +302,25 @@ class MainWindow(QWidget):
                 self.clear_thumbnails()
                 self.clear_img_display()
             self.build_dict()
+
+    def change_font(self, element = QLineEdit or QtWidgets.QLabel):
+        '''  Changes the font of the given element  '''
+        # self.regular_font
+        # self.itallic_font
+        # self.big_font
+        if element.font() == self.itallic_font:
+            element.setFont(self.regular_font)
+            print("SET REGULAR!")
+        elif element.font() != self.itallic_font and element.text() == "":
+            element.setFont(self.itallic_font)
+            print("SET ITALLIC!")
+        
+        # if element.font() == self.big_font:
+        #     element.setFont(self.regular_font)
+        #     print("SET REGULAR!")
+        # elif element.font() != self.big_font and element.text() == "":
+        #     element.setFont(self.big_font)
+        #     print("SET ITALLIC!")
 
     def create_working_directory(self):
         ''' Assigns the input path to the current working directory '''
@@ -326,7 +352,7 @@ class MainWindow(QWidget):
                 self.working_directory.split("/")[-2] + "/" + self.working_directory.split("/")[-1]
             self.category_view.setHeaderLabel(self.wrk_dir_path)
             self.image_folder = self.working_directory.split("/")[-1]
-            self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
+            self.working_dir = QTreeWidgetItem(self.category_view, [self.image_folder])
             self.working_dir.setExpanded(True)
             self.category_view.addTopLevelItem(self.working_dir)
             self.new_category_input.setDisabled(False)
@@ -334,7 +360,7 @@ class MainWindow(QWidget):
             self.clear_categories_tree()
             self.category_view.setHeaderLabel(self.working_directory.split("\\")[-3])
             self.image_folder = self.working_directory.split("\\")[-1]
-            self.working_dir = QtWidgets.QTreeWidgetItem(self.category_view, [self.image_folder])
+            self.working_dir = QTreeWidgetItem(self.category_view, [self.image_folder])
             self.category_view.addTopLevelItem(self.working_dir)
 
         self.sub_dirs = set(name for name in os.listdir(self.working_directory) if os.path.isdir(name))
@@ -351,7 +377,7 @@ class MainWindow(QWidget):
 
         if dir:
             intPrint("variable", 1, dir)
-            self.new_category = QtWidgets.QTreeWidgetItem(self.working_dir,[dir])
+            self.new_category = QTreeWidgetItem(self.working_dir,[dir])
             intPrint("info", 1, 'self.new_category: ' + self.new_category.data(0, 0))
             self.category_view.addTopLevelItem(self.new_category)
             self.category_selector.addItem(dir)
@@ -365,12 +391,12 @@ class MainWindow(QWidget):
                 # intPrint("test", 2, F"self.category_view.indexOfTopLevelItem(self.selected_item)': {self.category_view.indexOfTopLevelItem(self.selected_item)}")
                 if self.selected_item.text(0)[len(self.selected_item.text(0)) - 4] != ".":
                     intPrint("test", 2, F"'self.selected_item' text: {self.selected_item.text(0)[len(self.selected_item.text(0)) - 4]}")
-                    self.new_category = QtWidgets.QTreeWidgetItem(self.selected_item,[self.new_category_input.text()])
+                    self.new_category = QTreeWidgetItem(self.selected_item,[self.new_category_input.text()])
                     self.category_selector.addItem(self.new_category_input.text())
                 else:
                     return False
             else:
-                self.new_category = QtWidgets.QTreeWidgetItem(self.working_dir,[self.new_category_input.text()])
+                self.new_category = QTreeWidgetItem(self.working_dir,[self.new_category_input.text()])
                 self.category_selector.addItem(self.new_category_input.text())
 
             self.category_selector.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
@@ -392,7 +418,7 @@ class MainWindow(QWidget):
         category = self.category_view.findItems(category, Qt.MatchFlag.MatchRecursive, column=0)
         intPrint("info", 2, category[0].text(0))
         intPrint("test", 2, F"Type of 'category': {type(category[0])}")
-        self.category_item = QtWidgets.QTreeWidgetItem(category[0], [item])
+        self.category_item = QTreeWidgetItem(category[0], [item])
         intPrint("test", 2, self.category_item.text(0))
 
     def on_category_clicked(self):
@@ -413,6 +439,8 @@ class MainWindow(QWidget):
             self.create_button.setDisabled(False)
         elif self.new_category_input.text() == "":
             self.create_button.setDisabled(True)
+
+        self.change_font(self.new_category_input)
 
     def build_dict(self):
         ''' Creates all the dictionaries, lists, and sets to be used,
@@ -522,7 +550,7 @@ class MainWindow(QWidget):
             QSizePolicy.Policy.Fixed)
 
         # Add Button
-        self.add_button =  QPushButton('Add', self)
+        self.add_button = QPushButton('Add', self)
         self.add_button.setSizePolicy(
             QSizePolicy.Policy.Fixed,
                 QSizePolicy.Policy.Fixed)
