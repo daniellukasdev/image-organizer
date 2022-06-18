@@ -1,8 +1,8 @@
 from PyQt6 import QtCore, QtGui, QtWidgets 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
-    QGraphicsView, QGridLayout, QLineEdit, QLabel, QMessageBox, QPushButton, QScrollArea, QSizePolicy, \
-        QSplitter, QTreeWidget, QTreeWidgetItem, QWidget
+from PyQt6.QtWidgets import QApplication, QComboBox, QFrame, QFileDialog, QGraphicsPixmapItem, QGraphicsScene,\
+    QGraphicsView, QGridLayout, QHBoxLayout, QLineEdit, QLabel, QMessageBox, QPushButton, QScrollArea, QSizePolicy, \
+        QSplitter, QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget
 from PyQt6.QtGui import QFont, QImage, QPixmap
 import sys, os, platform, shutil
 # qtmodern.styles
@@ -120,18 +120,18 @@ class MainWindow(QWidget):
         self.scrolling_display_area.setWidget(self.image_display)
 
         # Image Navigation Buttons
-        self.previous_button = QPushButton("<", self)
-        self.previous_button.setFont(self.big_font)
-        self.previous_button.setMaximumWidth(25)
+        self.previous_button = QPushButton("< Previous", self)
+        # self.previous_button.setFont(self.big_font)
+        self.previous_button.setMaximumWidth(100)
         self.previous_button.setSizePolicy(
             QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Preferred)
         self.previous_button.clicked.connect(self.previous_image)
         self.previous_button.setDisabled(True)
 
-        self.next_button = QPushButton(">", self)
-        self.next_button.setFont(self.big_font)
-        self.next_button.setMaximumWidth(25)
+        self.next_button = QPushButton("Next >", self)
+        # self.next_button.setFont(self.big_font)
+        self.next_button.setMaximumWidth(100)
         self.next_button.setSizePolicy(
             QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Preferred)
@@ -169,7 +169,7 @@ class MainWindow(QWidget):
     #######################################################################
 
         # creates the main layout
-        self.main_layout = QtWidgets.QVBoxLayout()
+        self.main_layout = QVBoxLayout()
 
         # creates the right_layout and adds objects
         self.right_frame = QtWidgets.QFrame(self)
@@ -177,7 +177,7 @@ class MainWindow(QWidget):
         self.right_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.Policy.Preferred)
-        self.right_layout = QtWidgets.QVBoxLayout(self.right_frame)
+        self.right_layout = QVBoxLayout(self.right_frame)
 
         # selection Layout
         self.top_frame = QtWidgets.QFrame(self)
@@ -185,16 +185,22 @@ class MainWindow(QWidget):
         self.top_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.Policy.Fixed)
-        self.path_selection_layout = QtWidgets.QHBoxLayout(self.top_frame)
+        self.path_selection_layout = QHBoxLayout(self.top_frame)
         self.path_selection_layout.addWidget(self.browse_button)
         self.path_selection_layout.addWidget(self.selection_input)
         self.path_selection_layout.addWidget(self.import_button)
 
+        # Create navigation button layout
+        self.nav_btn_layout = QHBoxLayout()
+        # self.nav_btn_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.nav_btn_layout.addWidget(self.previous_button, 4)
+        self.nav_btn_layout.addWidget(self.next_button, 4)
+
         # Create the main Display and Navigation Layout
-        self.image_nav_layout = QtWidgets.QHBoxLayout()
-        self.image_nav_layout.addWidget(self.previous_button, 0)
+        self.image_nav_layout = QVBoxLayout()
+        self.image_nav_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.image_nav_layout.addWidget(self.scrolling_display_area, 4)
-        self.image_nav_layout.addWidget(self.next_button, 0)
+        self.image_nav_layout.addLayout(self.nav_btn_layout, 0)
 
         # add selection layout to right_layout
         self.right_layout.addLayout(self.image_nav_layout)
@@ -202,11 +208,11 @@ class MainWindow(QWidget):
         # Category Layout
         self.left_frame = QtWidgets.QFrame(self)
         self.left_frame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.left_layout = QtWidgets.QVBoxLayout(self.left_frame)
+        self.left_layout = QVBoxLayout(self.left_frame)
 
         # creates category_new layout
         self.left_layout.addWidget(self.categories_label, 0, QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.category_create_new_layout = QtWidgets.QHBoxLayout()
+        self.category_create_new_layout = QHBoxLayout()
         self.category_create_new_layout.addWidget(self.new_category_input)
         self.category_create_new_layout.addWidget(self.create_button)
 
@@ -237,7 +243,7 @@ class MainWindow(QWidget):
         self.bottom_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.Policy.Minimum)
-        self.bottom_layout = QtWidgets.QHBoxLayout(self.bottom_frame)
+        self.bottom_layout = QHBoxLayout(self.bottom_frame)
         self.bottom_layout.setSpacing(10)
         self.scrolling_grid_area.setWidget(self.bottom_frame)
 
@@ -251,7 +257,7 @@ class MainWindow(QWidget):
         self.vertical_splitter.setCollapsible(1, False)
 
         # status area
-        self.status_layout = QtWidgets.QHBoxLayout()
+        self.status_layout = QHBoxLayout()
         self.status_layout.addWidget(self.loading_msg_label,3)
         self.status_layout.addWidget(self.version_label,1)
         # add sub_layouts to main layout
@@ -479,6 +485,8 @@ class MainWindow(QWidget):
         intPrint("function", 1, "Executed function: display_images()")
         # intPrint("variable", 1, f"self.sorted_image_files: {self.sorted_image_files}")
 
+        [width, height] = self.get_widget_size(self.scrolling_display_area)
+
         if image:
             for file in enumerate(self.sorted_image_files):
                 index = file[0]
@@ -493,11 +501,20 @@ class MainWindow(QWidget):
         self.interactive_widgets_status()
         self.image = QImage(self.thumb_list[self.image_index])
         self.image_display.setPixmap(QPixmap(self.image).scaled(
-            700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
+            width - 4, height - 4, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
+        # self.image_display.autoFillBackground()
+        self.image_display.setSizePolicy(
+                QSizePolicy.Policy.MinimumExpanding,
+                QSizePolicy.Policy.MinimumExpanding)
         
         self.get_current_image()
         self.unhighlight_all()
         self.highlight_selected()
+
+    def get_widget_size(self, widget):
+        image_width = widget.geometry().width()
+        image_height = widget.geometry().height()
+        return [image_width, image_height]
 
 
     def img_extention_check(self):
@@ -518,7 +535,7 @@ class MainWindow(QWidget):
             self.image_index = self.image_index-1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
-                700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
+                self.image_width, self.image_height, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.unhighlight_all()
             self.highlight_selected()
         self.get_current_image()
@@ -531,7 +548,7 @@ class MainWindow(QWidget):
             self.image_index += 1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
-                700, 700, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
+                self.image_width, self.image_height, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.unhighlight_all()
             self.highlight_selected()
         self.get_current_image()
@@ -543,7 +560,8 @@ class MainWindow(QWidget):
         intPrint("function", 1, "Executed function: build_selector()")
 
         # Category Selector
-        self.category_selector = QtWidgets.QComboBox(self)
+        self.category_selector = QComboBox(self)
+        self.category_selector.setMinimumWidth(200)
         self.category_selector.setDisabled(True)
         self.category_selector.setSizePolicy(
             QSizePolicy.Policy.Preferred,
@@ -563,9 +581,10 @@ class MainWindow(QWidget):
         self.cat_frame.setSizePolicy(
                 QSizePolicy.Policy.Preferred,
                 QSizePolicy.Policy.Fixed)
-        self.cat_sel_layout = QtWidgets.QHBoxLayout(self.cat_frame)
-        self.cat_sel_layout.addWidget(self.category_selector)
-        self.cat_sel_layout.addWidget(self.add_button)
+        self.cat_sel_layout = QHBoxLayout(self.cat_frame)
+        self.cat_sel_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.cat_sel_layout.addWidget(self.category_selector, 0)
+        self.cat_sel_layout.addWidget(self.add_button, 0)
 
         # Adds the selector to right layout
         self.right_layout.addWidget(self.cat_frame)
@@ -633,7 +652,7 @@ class MainWindow(QWidget):
             # assigns a name to every frame created so that they are directly accessible
             self.thumb_frame.setObjectName(self.file_name)
             self.thumb_list.append(self.thumb_frame.objectName())
-            self.thumb_layout = QtWidgets.QVBoxLayout(self.thumb_frame)
+            self.thumb_layout = QVBoxLayout(self.thumb_frame)
             self.thumb_layout.addWidget(self.thumb_img)
             self.thumb_layout.addWidget(self.thumb_txt)
             self.bottom_layout.addWidget(self.thumb_frame)
@@ -832,7 +851,7 @@ class MainWindow(QWidget):
 
         self.category_selector.clear()
         QApplication.processEvents()
-        self.category_selector.addItem("--Select Category--")
+        self.category_selector.addItem("    --Select Category--    ")
         self.set_category_index()
 
 if __name__ == '__main__':
