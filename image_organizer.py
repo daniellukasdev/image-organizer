@@ -35,10 +35,13 @@ class MainWindow(QWidget):
 
         # Create Font Style Options
         self.regular_font = QFont()
+        self.bold_font = QFont()
+        self.bold_font.setBold(True)
+        # self.bold_font.setPixelSize(14)
         self.itallic_font = QFont()
         self.itallic_font.setItalic(True)
         self.big_font = QFont()
-        self.big_font.setPointSize(20)
+        self.big_font.setPixelSize(20)
         self.big_font.setBold(True)
         self.big_font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 1.0)
 
@@ -92,14 +95,17 @@ class MainWindow(QWidget):
         # Organize button and label
         self.organization_label = QLabel("This operation cannot be undone!")
         self.organization_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.organization_label.setStyleSheet("border-radius: 6px")
         self.organization_label.setFont(self.itallic_font)
         self.organization_label.setWordWrap(True)
         self.organization_label.setSizePolicy(
             QSizePolicy.Policy.MinimumExpanding,
             QSizePolicy.Policy.MinimumExpanding)
         self.organize_button = QPushButton('Organize', self)
+        self.organize_button.setStyleSheet("border: 1px solid rgb(170, 170, 170); border-radius: 6px")
         self.organize_button.setFont(self.big_font)
-        self.organize_button.setFixedWidth(125)
+        self.organize_button.setFixedWidth(120)
+        self.organize_button.setFixedHeight(40)
         self.organize_button.setSizePolicy(
             QSizePolicy.Policy.Fixed,
             QSizePolicy.Policy.Preferred)
@@ -145,8 +151,9 @@ class MainWindow(QWidget):
         self.loading_msg_label.setText("")
         self.loading_msg_label.setDisabled(True)
         self.loading_msg_label.setFont(self.itallic_font)
+        self.loading_msg_label.setMinimumWidth(400)
         self.loading_msg_label.setSizePolicy(
-            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.MinimumExpanding,
             QSizePolicy.Policy.Fixed)
         self.loading_msg_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self.loading_msg_label.textChanged[str].connect(self.loading_msg_check)
@@ -158,11 +165,11 @@ class MainWindow(QWidget):
         self.version_label.setText('Created by: Daniel Lukas v0.3.2alpha')
         self.version_label.setDisabled(True)
         self.version_label.setFont(self.itallic_font)
-        self.version_label.setFixedWidth(225)
-        self.version_label.setSizePolicy(
-            QSizePolicy.Policy.Fixed,
-            QSizePolicy.Policy.Fixed)
-        self.version_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
+        self.version_label.setMinimumWidth(240)
+        # self.version_label.setSizePolicy(
+        #     QSizePolicy.Policy.Fixed,
+        #     QSizePolicy.Policy.Fixed)
+        self.version_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
     #######################################################################
     ##############################  Layout  ###############################
@@ -211,14 +218,14 @@ class MainWindow(QWidget):
         self.left_layout = QVBoxLayout(self.left_frame)
 
         # creates category_new layout
-        self.left_layout.addWidget(self.categories_label, 0, QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.left_layout.addWidget(self.categories_label, 0, QtCore.Qt.AlignmentFlag.AlignLeft)
         self.category_create_new_layout = QHBoxLayout()
         self.category_create_new_layout.addWidget(self.new_category_input)
         self.category_create_new_layout.addWidget(self.create_button)
 
         self.left_layout.addLayout(self.category_create_new_layout, 0)
         self.left_layout.addWidget(self.category_view, 1)
-        self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.left_layout.addWidget(self.organize_button,0, QtCore.Qt.AlignmentFlag.AlignRight)
 
         # Creates the horizontal splitter
         self.horizontal_splitter = QSplitter(QtCore.Qt.Orientation.Horizontal)
@@ -258,8 +265,9 @@ class MainWindow(QWidget):
 
         # status area
         self.status_layout = QHBoxLayout()
-        self.status_layout.addWidget(self.loading_msg_label,3)
-        self.status_layout.addWidget(self.version_label,1)
+        self.status_layout.addWidget(self.loading_msg_label, 4)
+        self.status_layout.addWidget(self.version_label, 1)
+
         # add sub_layouts to main layout
         self.main_layout.addWidget(self.top_frame)
         self.main_layout.addWidget(self.vertical_splitter)
@@ -718,6 +726,7 @@ class MainWindow(QWidget):
         ''' Disables and enables the organize button when the conditions are met '''
         if len(self.file_operation_dict) != 0:
             self.organize_button.setDisabled(False)
+            self.organize_button.setStyleSheet("border: 1px solid rgb(0, 10, 136); border-radius: 6px; background: rgb(0, 99, 225); color: white")
         else:
             self.organize_button.setDisabled(True)
 
