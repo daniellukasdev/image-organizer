@@ -468,7 +468,7 @@ class MainWindow(QWidget):
         self.sorted_image_files = []
         self.image_index_list = []
         self.thumb_list = []
-        self.file_operation_dict = {}
+        self.file_operations = {}
         self.category_folder_set = set()
 
         self.reset_image_list()
@@ -585,7 +585,7 @@ class MainWindow(QWidget):
         self.add_button.setSizePolicy(
             QSizePolicy.Policy.Fixed,
                 QSizePolicy.Policy.Fixed)
-        self.add_button.clicked.connect(self.build_file_operation_dict)
+        self.add_button.clicked.connect(self.build_file_operations)
         self.add_button.setDisabled(True)
 
         # Creates the category selector layout
@@ -701,22 +701,22 @@ class MainWindow(QWidget):
         #sets the style of the selected thumbnail
         self.clicked.setStyleSheet("border: 1px solid rgb(42, 130, 218); background-color: rgb(42, 130, 218); color: white;")
 
-    def build_file_operation_dict(self):
+    def build_file_operations(self):
         ''' Populates the dictionary that all file operations reference '''
 
-        intPrint("function", 1, "Executed function: build_file_operation_dict()")
+        intPrint("function", 1, "Executed function: build_file_operations()")
 
         tree_item = self.get_tree_item(self.category_name) 
         intPrint("variable", 1, f"Tree item text: {tree_item.text(0)}")  
         category = tree_item.text(0)     
 
         self.get_current_image()
-        if self.file_operation_dict == {}:
-            self.file_operation_dict = {self.current_image : f"{tree_item.parent().text(0)}/{category}"}
+        if self.file_operations == {}:
+            self.file_operations = {self.current_image : f"{tree_item.parent().text(0)}/{category}"}
         else:
-            self.file_operation_dict[self.current_image] = f"{tree_item.parent().text(0)}/{category}"
+            self.file_operations[self.current_image] = f"{tree_item.parent().text(0)}/{category}"
         self.loading_msg_label.setText(f"{self.current_image} added to {category}")
-        intPrint("variable", 1, f"file_operation_dict: {self.file_operation_dict}")
+        intPrint("variable", 1, f"file_operations: {self.file_operations}")
         self.populate_category(category , self.current_image)
         self.organization_btn_status()
 
@@ -731,15 +731,15 @@ class MainWindow(QWidget):
         becomes the current item in the selector when the image is selected '''
 
         self.get_current_image()
-        if self.current_image in self.file_operation_dict.keys():
-            self.category_index = self.category_selector.findText(self.file_operation_dict[self.current_image], QtCore.Qt.MatchFlag.MatchFixedString)
+        if self.current_image in self.file_operations.keys():
+            self.category_index = self.category_selector.findText(self.file_operations[self.current_image], QtCore.Qt.MatchFlag.MatchFixedString)
             self.category_selector.setCurrentIndex(self.category_index)
         else:
             self.category_selector.setCurrentIndex(0)
 
     def organization_btn_status(self):
         ''' Disables and enables the organize button when the conditions are met '''
-        if len(self.file_operation_dict) != 0:
+        if len(self.file_operations) != 0:
             self.organize_button.setDisabled(False)
             self.organize_button.setStyleSheet("border: 1px solid rgb(0, 10, 136); border-radius: 6px; background: rgb(0, 99, 225); color: white")
         else:
@@ -779,7 +779,7 @@ class MainWindow(QWidget):
 
         rename = self.rename_popup()
         
-        for self.current_image, self.category_name in self.file_operation_dict.items():
+        for self.current_image, self.category_name in self.file_operations.items():
             # To-do: check for parent category in tree view
             # To-do: if parent, place parent before category_name
             self.category_folder_set.add(self.category_name)
@@ -790,7 +790,7 @@ class MainWindow(QWidget):
             # To-do: check for existing directory
             os.mkdir(f"{self.category_name}")
         
-        for self.current_image, self.category_name in self.file_operation_dict.items():
+        for self.current_image, self.category_name in self.file_operations.items():
             if self.current_os == "Linux" or self.current_os == "Darwin":
                 shutil.move(self.current_image, f"{self.working_directory}/{self.category_name}")
             else:
