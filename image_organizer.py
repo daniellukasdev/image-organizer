@@ -427,13 +427,13 @@ class MainWindow(QWidget):
         and adds images w/file names and paths when added with Add button  '''
 
         intPrint("function", 1, "Executed function: populate_category()")
-        intPrint("variable", 1, "category: " + category)
-        intPrint("variable", 1, "item: " + item)
+        # intPrint("variable", 1, "category: " + category)
+        # intPrint("variable", 1, "item: " + item)
         category = self.category_view.findItems(category, Qt.MatchFlag.MatchRecursive, column=0)
-        intPrint("info", 2, category[0].text(0))
-        intPrint("test", 2, F"Type of 'category': {type(category[0])}")
+        # intPrint("info", 2, category[0].text(0))
+        # intPrint("test", 2, F"Type of 'category': {type(category[0])}")
         self.category_item = QTreeWidgetItem(category[0], [item])
-        intPrint("test", 2, self.category_item.text(0))
+        # intPrint("test", 2, self.category_item.text(0))
 
     def on_category_clicked(self):
         '''  Assigns category to variable when clicked  '''
@@ -441,7 +441,8 @@ class MainWindow(QWidget):
         # gets the treeview item that was clicked
         self.selected_item = self.category_view.currentItem()#.text(0)
         intPrint("event", 1, "Selected: " + self.selected_item.text(0))
-        # intPrint("test", 2, F"Type of 'self.selected_item': {type(self.selected_item)}")
+        # To-do: 
+        intPrint("test", 2, f"parent of clicked': {self.selected_item.parent().text(0)}")
 
         # passes the clicked treeview item to display_images()
         self.display_images(self.selected_item.text(0))
@@ -539,11 +540,13 @@ class MainWindow(QWidget):
     def previous_image(self):
         ''' Allows for backward navigation '''
 
+        [width, height] = self.get_widget_size(self.scrolling_display_area)
+
         if self.image_index != 0:
             self.image_index = self.image_index-1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
-                self.image_width, self.image_height, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
+                width - 4, height - 4, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.unhighlight_all()
             self.highlight_selected()
         self.get_current_image()
@@ -552,11 +555,13 @@ class MainWindow(QWidget):
     def next_image(self):
         ''' Allows for forward navigation '''
 
+        [width, height] = self.get_widget_size(self.scrolling_display_area)
+
         if self.image_index < len(self.sorted_image_files)-1:
             self.image_index += 1
             self.image = QImage(self.thumb_list[self.image_index])
             self.image_display.setPixmap(QPixmap(self.image).scaled(
-                self.image_width, self.image_height, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
+                width - 4, height - 4, QtCore.Qt.AspectRatioMode.KeepAspectRatio))
             self.unhighlight_all()
             self.highlight_selected()
         self.get_current_image()
@@ -701,15 +706,25 @@ class MainWindow(QWidget):
 
         intPrint("function", 1, "Executed function: build_file_operation_dict()")
 
+        tree_item = self.get_tree_item(self.category_name) 
+        intPrint("variable", 1, f"Tree item text: {tree_item.text(0)}")  
+        category = tree_item.text(0)     
+
         self.get_current_image()
         if self.file_operation_dict == {}:
-            self.file_operation_dict = {self.current_image : self.category_name}
+            self.file_operation_dict = {self.current_image : f"{tree_item.parent().text(0)}/{category}"}
         else:
-            self.file_operation_dict[self.current_image] = self.category_name
-        self.loading_msg_label.setText(f"{self.current_image} added to {self.category_name}")
+            self.file_operation_dict[self.current_image] = f"{tree_item.parent().text(0)}/{category}"
+        self.loading_msg_label.setText(f"{self.current_image} added to {category}")
         intPrint("variable", 1, f"file_operation_dict: {self.file_operation_dict}")
-        self.populate_category(self.category_name , self.current_image)
+        self.populate_category(category , self.current_image)
         self.organization_btn_status()
+
+    def get_tree_item(self, category = ""):
+        ''' Searches the tree widget for match and returns the first index of the result array '''
+        tree_items = self.category_view.findItems(category, Qt.MatchFlag.MatchRecursive, column=0)
+        return tree_items[0]
+        # intPrint("variable", 1, f"Tree item text: {tree_item[0].text(0)}")
 
     def show_category_if_categorized(self):
         ''' If an image has been added to a category, that category 
@@ -765,9 +780,14 @@ class MainWindow(QWidget):
         rename = self.rename_popup()
         
         for self.current_image, self.category_name in self.file_operation_dict.items():
-                self.category_folder_set.add(self.category_name)
+            # To-do: check for parent category in tree view
+            # To-do: if parent, place parent before category_name
+            self.category_folder_set.add(self.category_name)
+        
+        intPrint("variable", 2, f"{self.category_folder_set}")
 
         for self.category_name in self.category_folder_set:
+            # To-do: check for existing directory
             os.mkdir(f"{self.category_name}")
         
         for self.current_image, self.category_name in self.file_operation_dict.items():
