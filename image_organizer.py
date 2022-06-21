@@ -343,8 +343,8 @@ class MainWindow(QWidget):
 
         if os.path.exists(self.selection_input.text()) and self.selection_input.text() != "":
             self.input_text = self.selection_input.text()
-            self.working_directory = self.input_text
-            os.chdir(self.working_directory)
+            self.work_dir_path_full = self.input_text
+            os.chdir(self.work_dir_path_full)
             self.clear_categories_tree()
             self.clear_cat_selector()
             self.loading_msg_label.setText("Importing Images . . .")
@@ -359,25 +359,28 @@ class MainWindow(QWidget):
         
         self.current_os = platform.system()
 
-        if "/" in self.working_directory:
+        if "/" in self.work_dir_path_full:
             self.clear_categories_tree()
-            intPrint("variable", 1, self.working_directory.split("/"))
-            self.wrk_dir_path = self.working_directory.split("/")[-3] + "/" + \
-                self.working_directory.split("/")[-2] + "/" + self.working_directory.split("/")[-1]
-            self.category_view.setHeaderLabel(self.wrk_dir_path)
-            self.image_folder = self.working_directory.split("/")[-1]
+            intPrint("variable", 1, self.work_dir_path_full.split("/"))
+
+            # creates minimal version of working path back to grandparent
+            self.work_dir_path_min = self.work_dir_path_full.split("/")[-3] + "/" + \
+                self.work_dir_path_full.split("/")[-2] + "/" + self.work_dir_path_full.split("/")[-1]
+
+            self.category_view.setHeaderLabel(self.work_dir_path_min)
+            self.image_folder = self.work_dir_path_full.split("/")[-1]
             self.working_dir = QTreeWidgetItem(self.category_view, [self.image_folder])
             self.working_dir.setExpanded(True)
             self.category_view.addTopLevelItem(self.working_dir)
             self.new_category_input.setDisabled(False)
-        elif "\\" in self.working_directory:
+        elif "\\" in self.work_dir_path_full:
             self.clear_categories_tree()
-            self.category_view.setHeaderLabel(self.working_directory.split("\\")[-3])
-            self.image_folder = self.working_directory.split("\\")[-1]
+            self.category_view.setHeaderLabel(self.work_dir_path_full.split("\\")[-3])
+            self.image_folder = self.work_dir_path_full.split("\\")[-1]
             self.working_dir = QTreeWidgetItem(self.category_view, [self.image_folder])
             self.category_view.addTopLevelItem(self.working_dir)
 
-        self.sub_dirs = set(name for name in os.listdir(self.working_directory) if os.path.isdir(name))
+        self.sub_dirs = set(name for name in os.listdir(self.work_dir_path_full) if os.path.isdir(name))
         intPrint("variable", 1, self.sub_dirs)
         
         # checks for sub-directories within working directory and creates new categories using sub-dir names
@@ -778,31 +781,44 @@ class MainWindow(QWidget):
         intPrint("function", 1, "Executed function: organize_images()")
 
         rename = self.rename_popup()
+
+        self.working_directory = self.work_dir_path_full.split("/")[-1]
+        print("WORKING DIRECTORY: " + self.working_directory)
         
-        for self.current_image, self.category_name in self.file_operations.items():
+        for path in self.file_operations.values():
+            print("path: " + path)
             # To-do: check for parent category in tree view
             # To-do: if parent, place parent before category_name
-            self.category_folder_set.add(self.category_name)
+            self.category_folder_set.add(path)
         
         intPrint("variable", 2, f"{self.category_folder_set}")
 
-        for self.category_name in self.category_folder_set:
+        for path in self.category_folder_set:
             # To-do: check for existing directory
-            os.mkdir(f"{self.category_name}")
-        
-        for self.current_image, self.category_name in self.file_operations.items():
             if self.current_os == "Linux" or self.current_os == "Darwin":
-                shutil.move(self.current_image, f"{self.working_directory}/{self.category_name}")
+                dirs_from_cat = path.split("/")
+                print(f"dir_from_cat: {dirs_from_cat}")
+                for i in reversed(range(len(dirs_from_cat))):
+                    print(f"dir_from_cat[dir]: {dirs_from_cat[i]}")
+                return False
+                os.mkdir(f"{path}")
             else:
-                shutil.move(self.current_image, f"{self.working_directory}\\{self.category_name}")
+                dir_from_cat = path
+                os.mkdir(f"{path}")
+        
+        for image, path in self.file_operations.items():
+            if self.current_os == "Linux" or self.current_os == "Darwin":
+                shutil.move(image, f"{self.work_dir_path_full}/{path}")
+            else:
+                shutil.move(image, f"{self.work_dir_path_full}\\{path}")
         
         if rename:
             for folder in self.category_folder_set:
 
                 if self.current_os == "Linux" or self.current_os == "Darwin":
-                    os.chdir(f"{self.working_directory}/{folder}")
+                    os.chdir(f"{self.work_dir_path_full}/{folder}")
                 else:
-                    os.chdir(f"{self.working_directory}\\{folder}")
+                    os.chdir(f"{self.work_dir_path_full}\\{folder}")
       
                 index = 0
                 for f in os.listdir():
@@ -810,7 +826,7 @@ class MainWindow(QWidget):
                     new_name = "{}{}{}{}".format(folder, "0", index, f_ext)
                     os.rename(f, new_name)
                     index += 1
-            os.chdir(self.working_directory)
+            os.chdir(self.work_dir_path_full)
 
 ###################################################################################
 ################################  Rename Files  ###################################
